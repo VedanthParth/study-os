@@ -3,7 +3,7 @@ from typing import Literal
 
 from pydantic import BaseModel, Field
 
-WorkspaceType = Literal["semester", "competitive", "research", "self_learning"]
+WorkspaceType = Literal["semester", "competitive", "research", "self-learning"]
 
 
 class WorkspaceCreate(BaseModel):
