@@ -1,7 +1,7 @@
 import { cn } from '@/lib/utils'
 
-import { WORKSPACE_TYPE_DESCRIPTIONS, WORKSPACE_TYPE_LABELS } from '../types'
 import type { WorkspaceType } from '../types'
+import { WORKSPACE_TYPE_DESCRIPTIONS, WORKSPACE_TYPE_LABELS } from '../types'
 
 interface WorkspaceTypeCardProps {
   type: WorkspaceType

@@ -2,7 +2,6 @@ import { useState } from 'react'
 
 import { useWorkspaceStore } from '../store'
 import type { WorkspaceType } from '../types'
-import { WORKSPACE_TYPE_LABELS } from '../types'
 import { WorkspaceTypeCard } from './WorkspaceTypeCard'
 
 const TYPES: WorkspaceType[] = ['semester', 'competitive', 'research', 'self_learning']
@@ -107,5 +106,3 @@ export function CreateWorkspaceModal({ onClose }: CreateWorkspaceModalProps) {
     </div>
   )
 }
-
-export { WORKSPACE_TYPE_LABELS }

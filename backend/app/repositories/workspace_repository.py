@@ -1,4 +1,4 @@
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 from sqlalchemy.orm import Session
 
@@ -30,7 +30,7 @@ class WorkspaceRepository:
     def update(self, workspace: Workspace, payload: WorkspaceUpdate) -> Workspace:
         for field, value in payload.model_dump(exclude_unset=True).items():
             setattr(workspace, field, value)
-        workspace.updated_at = datetime.now(timezone.utc)
+        workspace.updated_at = datetime.now(UTC)
         self.db.commit()
         self.db.refresh(workspace)
         return workspace

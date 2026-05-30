@@ -4,8 +4,8 @@ import { useEffect, useState } from 'react'
 import { EmptyState } from '@/components/ui/EmptyState'
 import { PageContainer } from '@/components/ui/PageContainer'
 import { TopBar } from '@/components/ui/TopBar'
-import { WorkspaceCard } from '@/features/workspace/components/WorkspaceCard'
 import { CreateWorkspaceModal } from '@/features/workspace/components/CreateWorkspaceModal'
+import { WorkspaceCard } from '@/features/workspace/components/WorkspaceCard'
 import { useWorkspaceStore } from '@/features/workspace/store'
 
 export function WorkspacePage() {

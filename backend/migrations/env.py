@@ -1,17 +1,15 @@
 from logging.config import fileConfig
 
-from sqlalchemy import engine_from_config
-from sqlalchemy import pool
-
 from alembic import context
+from sqlalchemy import engine_from_config, pool
 
 config = context.config
 
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
-import app.models  # noqa: F401 — registers all models with Base
-from app.core.database import Base
+import app.models  # noqa: E402,F401 — must come after fileConfig; registers models with Base
+from app.core.database import Base  # noqa: E402
 
 target_metadata = Base.metadata
 
