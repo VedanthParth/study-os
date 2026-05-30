@@ -1,5 +1,1 @@
-import { create } from 'zustand'
-
-type TaskState = Record<string, never>
-
-export const useTaskStore = create<TaskState>()(() => ({}))
+export { useTaskStore } from '@/features/tasks/store'
