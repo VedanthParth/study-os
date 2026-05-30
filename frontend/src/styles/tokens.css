@@ -66,6 +66,9 @@
   --color-exam: #c0525a;        /* muted red — high-stakes events */
   --color-exam-muted: #fbeaeb;
 
+  --color-deadline: #b07840;    /* warm amber — deadlines */
+  --color-deadline-muted: #f7eddf;
+
   --color-planner: #6b7fa3;     /* slate — planning / scheduling */
   --color-planner-muted: #edf0f7;
 
