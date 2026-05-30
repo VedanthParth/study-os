@@ -4,7 +4,7 @@ import { useWorkspaceStore } from '../store'
 import type { WorkspaceType } from '../types'
 import { WorkspaceTypeCard } from './WorkspaceTypeCard'
 
-const TYPES: WorkspaceType[] = ['semester', 'competitive', 'research', 'self_learning']
+const TYPES: WorkspaceType[] = ['semester', 'competitive', 'research', 'self-learning']
 
 interface CreateWorkspaceModalProps {
   onClose: () => void

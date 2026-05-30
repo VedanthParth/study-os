@@ -45,7 +45,7 @@ export const useWorkspaceStore = create<WorkspaceState & WorkspaceActions>((set)
   createWorkspace: async (payload) => {
     const workspace = await workspaceApi.createWorkspace(payload)
     set((state) => {
-      const workspaces = [...state.workspaces, workspace]
+      const workspaces = [workspace, ...state.workspaces]
       const activeWorkspace = state.activeWorkspace ?? workspace
       if (!state.activeWorkspace) {
         localStorage.setItem(ACTIVE_WORKSPACE_KEY, workspace.id)

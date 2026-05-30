@@ -48,8 +48,13 @@ export function WorkspaceCard({
     const trimmed = renameValue.trim()
     if (trimmed && trimmed !== workspace.name) {
       setBusy(true)
-      await onRename(workspace.id, trimmed)
-      setBusy(false)
+      try {
+        await onRename(workspace.id, trimmed)
+      } catch {
+        setRenameValue(workspace.name)
+      } finally {
+        setBusy(false)
+      }
     }
     setRenaming(false)
   }
