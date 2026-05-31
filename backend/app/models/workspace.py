@@ -9,6 +9,7 @@ from app.core.database import Base
 
 if TYPE_CHECKING:
     from app.models.calendar_event import CalendarEvent
+    from app.models.study_session import StudySession
     from app.models.task import Task
 
 
@@ -37,4 +38,7 @@ class Workspace(Base):
     )
     calendar_events: Mapped[list["CalendarEvent"]] = relationship(
         "CalendarEvent", back_populates="workspace", cascade="all, delete-orphan"
+    )
+    study_sessions: Mapped[list["StudySession"]] = relationship(
+        "StudySession", back_populates="workspace", cascade="all, delete-orphan"
     )
