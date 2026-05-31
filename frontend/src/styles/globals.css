@@ -1,5 +1,5 @@
 /* ── Typography Foundation ───────────────────────────────────────────────── */
-/* System sans-serif stack: clean, readable, no web font dependency */
+/* Clean system sans-serif — readable for extended study sessions.          */
 :root {
   --font-sans:
     'Inter', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
@@ -63,10 +63,10 @@ code, pre {
   font-size: var(--text-sm);
 }
 
-/* ── Scrollbar (minimal) ─────────────────────────────────────────────────── */
+/* ── Scrollbar (paper-ink style) ─────────────────────────────────────────── */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 5px;
+  height: 5px;
 }
 ::-webkit-scrollbar-track {
   background: transparent;

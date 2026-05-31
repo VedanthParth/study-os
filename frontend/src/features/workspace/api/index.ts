@@ -9,10 +9,10 @@ import type {
 const BASE = '/api/workspaces'
 
 export const workspaceApi = {
-  getWorkspaces: (): Promise<Workspace[]> =>
-    apiClient.get<Workspace[]>(BASE).then((r) => r.data),
+  getWorkspaces: (userId: string): Promise<Workspace[]> =>
+    apiClient.get<Workspace[]>(BASE, { params: { user_id: userId } }).then((r) => r.data),
 
-  createWorkspace: (payload: CreateWorkspacePayload): Promise<Workspace> =>
+  createWorkspace: (payload: CreateWorkspacePayload & { user_id: string }): Promise<Workspace> =>
     apiClient.post<Workspace>(BASE, payload).then((r) => r.data),
 
   updateWorkspace: (id: string, payload: UpdateWorkspacePayload): Promise<Workspace> =>

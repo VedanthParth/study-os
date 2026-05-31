@@ -21,10 +21,12 @@ interface CalendarViewProps {
   onEventClick: (event: CalendarEvent) => void
   onDateSelect: (startStr: string, endStr: string) => void
   onDatesSet: (title: string) => void
+  initialView?: FCView
+  className?: string
 }
 
 export const CalendarView = forwardRef<CalendarHandle, CalendarViewProps>(
-  ({ events, onEventClick, onDateSelect, onDatesSet }, ref) => {
+  ({ events, onEventClick, onDateSelect, onDatesSet, initialView, className }, ref) => {
     const calendarRef = useRef<FullCalendar>(null)
 
     useImperativeHandle(ref, () => ({
@@ -53,11 +55,11 @@ export const CalendarView = forwardRef<CalendarHandle, CalendarViewProps>(
     }
 
     return (
-      <div className="rounded-lg border border-[var(--border-subtle)] bg-[var(--surface-card)] p-4 shadow-[var(--shadow-sm)] [&_.fc-button]:hidden [&_.fc-toolbar]:hidden">
+      <div className={className ?? 'rounded-lg border border-[var(--border-subtle)] bg-[var(--surface-card)] p-4 shadow-[var(--shadow-sm)] [&_.fc-button]:hidden [&_.fc-toolbar]:hidden'}>
         <FullCalendar
           ref={calendarRef}
           plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-          initialView="timeGridWeek"
+          initialView={initialView ?? 'timeGridWeek'}
           headerToolbar={false}
           selectable
           selectMirror

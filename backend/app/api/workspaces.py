@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, status
+from fastapi import APIRouter, Depends, Query, status
 from sqlalchemy.orm import Session
 
 from app.dependencies.db import get_db
@@ -14,9 +14,10 @@ def _service(db: Session = Depends(get_db)) -> WorkspaceService:
 
 @router.get("", response_model=list[WorkspaceResponse])
 def list_workspaces(
+    user_id: str = Query(...),
     service: WorkspaceService = Depends(_service),
 ) -> list[WorkspaceResponse]:
-    return service.list_workspaces()
+    return service.list_workspaces(user_id)
 
 
 @router.post("", response_model=WorkspaceResponse, status_code=status.HTTP_201_CREATED)

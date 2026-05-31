@@ -6,5 +6,6 @@ export const ROUTES = {
   CALENDAR: '/calendar',
   STUDY: '/study',
   ANALYTICS: '/analytics',
+  PLANNER: '/planner',
   SETTINGS: '/settings',
 } as const

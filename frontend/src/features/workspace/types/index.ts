@@ -2,6 +2,7 @@ export type WorkspaceType = 'semester' | 'competitive' | 'research' | 'self-lear
 
 export interface Workspace {
   id: string
+  user_id: string | null
   name: string
   type: WorkspaceType
   created_at: string

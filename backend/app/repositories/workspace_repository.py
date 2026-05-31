@@ -10,9 +10,12 @@ class WorkspaceRepository:
     def __init__(self, db: Session) -> None:
         self.db = db
 
-    def list(self) -> list[Workspace]:
+    def list_by_user(self, user_id: str) -> list[Workspace]:
         return (
-            self.db.query(Workspace).order_by(Workspace.created_at.desc()).all()
+            self.db.query(Workspace)
+            .filter(Workspace.user_id == user_id)
+            .order_by(Workspace.created_at.desc())
+            .all()
         )
 
     def get_by_id(self, workspace_id: str) -> Workspace | None:

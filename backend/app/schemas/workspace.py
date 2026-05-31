@@ -9,6 +9,7 @@ WorkspaceType = Literal["semester", "competitive", "research", "self-learning"]
 class WorkspaceCreate(BaseModel):
     name: str = Field(..., min_length=1, max_length=200)
     type: WorkspaceType
+    user_id: str
 
 
 class WorkspaceUpdate(BaseModel):
@@ -18,6 +19,7 @@ class WorkspaceUpdate(BaseModel):
 
 class WorkspaceResponse(BaseModel):
     id: str
+    user_id: str | None
     name: str
     type: WorkspaceType
     created_at: datetime

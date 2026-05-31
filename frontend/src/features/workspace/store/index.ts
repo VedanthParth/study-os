@@ -1,5 +1,7 @@
 import { create } from 'zustand'
 
+import { useUserStore } from '@/features/user/store'
+
 import { workspaceApi } from '../api'
 import type { CreateWorkspacePayload, UpdateWorkspacePayload, Workspace } from '../types'
 
@@ -25,9 +27,14 @@ export const useWorkspaceStore = create<WorkspaceState & WorkspaceActions>((set)
   loading: false,
 
   fetchWorkspaces: async () => {
+    const userId = useUserStore.getState().currentUser?.id
+    if (!userId) {
+      set({ workspaces: [], activeWorkspace: null, loading: false })
+      return
+    }
     set({ loading: true })
     try {
-      const workspaces = await workspaceApi.getWorkspaces()
+      const workspaces = await workspaceApi.getWorkspaces(userId)
       const storedId = localStorage.getItem(ACTIVE_WORKSPACE_KEY)
       const activeWorkspace =
         workspaces.find((w) => w.id === storedId) ?? workspaces[0] ?? null
@@ -43,7 +50,9 @@ export const useWorkspaceStore = create<WorkspaceState & WorkspaceActions>((set)
   },
 
   createWorkspace: async (payload) => {
-    const workspace = await workspaceApi.createWorkspace(payload)
+    const userId = useUserStore.getState().currentUser?.id
+    if (!userId) throw new Error('No authenticated user')
+    const workspace = await workspaceApi.createWorkspace({ ...payload, user_id: userId })
     set((state) => {
       const workspaces = [workspace, ...state.workspaces]
       const activeWorkspace = state.activeWorkspace ?? workspace
@@ -80,5 +89,4 @@ export const useWorkspaceStore = create<WorkspaceState & WorkspaceActions>((set)
       return { workspaces, activeWorkspace }
     })
   },
-
 }))

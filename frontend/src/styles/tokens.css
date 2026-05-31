@@ -44,58 +44,64 @@
   --font-semibold: 600;
   --font-bold: 700;
 
-  /* ── Grayscale Palette ──────────────────────────────────────────────────── */
-  --gray-0: #ffffff;
-  --gray-50: #fafafa;
-  --gray-100: #f5f5f5;
-  --gray-150: #efefef;
-  --gray-200: #e5e5e5;
-  --gray-300: #d4d4d4;
-  --gray-400: #a3a3a3;
-  --gray-500: #737373;
-  --gray-600: #525252;
-  --gray-700: #404040;
-  --gray-800: #262626;
-  --gray-900: #171717;
-  --gray-950: #0a0a0a;
+  /* ── Classic Paper Palette ──────────────────────────────────────────────── */
+  /* Warm ivory tones — each step adds a touch of amber warmth.              */
+  /* These replace the neutral gray scale for a calm desk/paper aesthetic.   */
+  --gray-0:   #ffffff;    /* pure white — for high-contrast text/borders */
+  --gray-50:  #f7f4ee;    /* warm ivory — page background (the desk)     */
+  --gray-100: #eeebe3;    /* warm light — sunken/inset surfaces           */
+  --gray-150: #e7e3db;    /* warm — light separator                       */
+  --gray-200: #dedad0;    /* warm subtle border                           */
+  --gray-300: #c8c4b9;    /* warm medium border                           */
+  --gray-400: #98928a;    /* warm muted — icons, placeholder text         */
+  --gray-500: #6c6760;    /* warm medium — secondary labels               */
+  --gray-600: #524d47;    /* warm charcoal — secondary body text          */
+  --gray-700: #3d3830;    /* warm dark — active states, strong borders    */
+  --gray-800: #27221d;    /* warm near-black                              */
+  --gray-900: #1e1a16;    /* warm ink — primary text, primary buttons     */
+  --gray-950: #100e0b;    /* deep ink                                     */
 
-  /* ── Semantic Accent Colors (muted, minimal) ────────────────────────────── */
-  --color-study: #4f7cac;       /* calm blue — study sessions */
-  --color-study-muted: #e8f0f8;
+  /* ── Semantic Accent Colors ─────────────────────────────────────────────── */
+  /* Muted, ink-on-paper feel — used sparingly as accent marks.              */
+  --color-study: #4a78a8;       /* calm blue-ink — study sessions           */
+  --color-study-muted: #e6edf5;
 
-  --color-exam: #c0525a;        /* muted red — high-stakes events */
-  --color-exam-muted: #fbeaeb;
+  --color-exam: #b84e56;        /* deep rose-ink — high-stakes events       */
+  --color-exam-muted: #f8e8e9;
 
-  --color-deadline: #b07840;    /* warm amber — deadlines */
-  --color-deadline-muted: #f7eddf;
+  --color-deadline: #a87038;    /* amber-ink — deadlines                    */
+  --color-deadline-muted: #f5ead9;
 
-  --color-planner: #6b7fa3;     /* slate — planning / scheduling */
-  --color-planner-muted: #edf0f7;
+  --color-planner: #5e7499;     /* slate-ink — planning / scheduling        */
+  --color-planner-muted: #e8edf5;
 
-  --color-success: #4a8c6f;     /* muted green — completion states */
-  --color-success-muted: #e8f5ef;
+  --color-success: #47856a;     /* sage-ink — completion states             */
+  --color-success-muted: #e4f1ec;
 
-  --color-muted: var(--gray-400); /* general muted text / borders */
+  --color-muted: var(--gray-400);
 
   /* ── Surfaces ───────────────────────────────────────────────────────────── */
-  --surface-page: var(--gray-50);
-  --surface-card: var(--gray-0);
-  --surface-raised: var(--gray-0);
-  --surface-sunken: var(--gray-100);
+  /* paper-on-desk: the page surface is the desk (warm ivory),               */
+  /* cards are sheets of paper (marginally lighter/creamier).                */
+  --surface-page:   var(--gray-50);    /* warm ivory desk  */
+  --surface-card:   #fdfcf7;           /* warm paper sheet */
+  --surface-raised: #fdfcf7;
+  --surface-sunken: var(--gray-100);   /* recessed area    */
 
   /* ── Borders ────────────────────────────────────────────────────────────── */
-  --border-subtle: var(--gray-200);
-  --border-default: var(--gray-300);
-  --border-strong: var(--gray-400);
+  --border-subtle:  var(--gray-200);   /* nearly invisible — panel edges  */
+  --border-default: var(--gray-300);   /* clear, not harsh                */
+  --border-strong:  var(--gray-400);   /* emphasis, active states         */
 
   /* ── Text ───────────────────────────────────────────────────────────────── */
-  --text-primary: var(--gray-900);
-  --text-secondary: var(--gray-600);
-  --text-tertiary: var(--gray-400);
-  --text-inverse: var(--gray-0);
+  --text-primary:   var(--gray-900);   /* warm ink — main body text       */
+  --text-secondary: var(--gray-600);   /* warm charcoal — supporting text */
+  --text-tertiary:  var(--gray-400);   /* warm graphite — metadata/labels */
+  --text-inverse:   #fdfcf7;           /* warm white on dark backgrounds  */
 
   /* ── Shadows ────────────────────────────────────────────────────────────── */
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 2px 8px rgba(0, 0, 0, 0.08);
-  --shadow-lg: 0 4px 16px rgba(0, 0, 0, 0.10);
+  /* Warm-tinted shadows evoke natural light on paper.                       */
+  --shadow-sm: 0 1px 3px rgba(110, 80, 50, 0.07);
+  --shadow-md: 0 2px 8px rgba(110, 80, 50, 0.09);
+  --shadow-lg: 0 4px 20px rgba(110, 80, 50, 0.11);
 }
