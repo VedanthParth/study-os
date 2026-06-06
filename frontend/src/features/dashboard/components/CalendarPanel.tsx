@@ -7,6 +7,7 @@ import { CalendarToolbar } from '@/features/calendar/components/CalendarToolbar'
 import type { CalendarHandle } from '@/features/calendar/components/CalendarView'
 import { CalendarView } from '@/features/calendar/components/CalendarView'
 import { useCalendarStore } from '@/features/calendar/store'
+import { parseServerDate } from '@/features/calendar/types'
 import { useWorkspaceStore } from '@/features/workspace/store'
 
 import { useDashboardInteractions } from '../store/interactions'
@@ -29,7 +30,7 @@ export function CalendarPanel() {
   if (!activeWorkspace) return null
 
   const todayKey = new Date().toDateString()
-  const eventsToday = events.filter((e) => new Date(e.start_time).toDateString() === todayKey).length
+  const eventsToday = events.filter((e) => parseServerDate(e.start_time).toDateString() === todayKey).length
 
   function handleViewChange(view: FCView) {
     calendarRef.current?.changeView(view)

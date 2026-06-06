@@ -6,7 +6,7 @@ import timeGridPlugin from '@fullcalendar/timegrid'
 import { forwardRef, useImperativeHandle, useRef } from 'react'
 
 import type { CalendarEvent } from '../types'
-import { EVENT_TYPE_COLORS } from '../types'
+import { EVENT_TYPE_COLORS, parseServerDate } from '../types'
 import type { FCView } from './CalendarToolbar'
 
 export interface CalendarHandle {
@@ -36,11 +36,13 @@ export const CalendarView = forwardRef<CalendarHandle, CalendarViewProps>(
       changeView: (view) => calendarRef.current?.getApi().changeView(view),
     }))
 
+    // Pass Date objects (absolute instants) rather than raw naive strings so
+    // FullCalendar doesn't re-interpret stored UTC times as local. See parseServerDate.
     const fcEvents = events.map((e) => ({
       id: e.id,
       title: e.title,
-      start: e.start_time,
-      end: e.end_time,
+      start: parseServerDate(e.start_time),
+      end: parseServerDate(e.end_time),
       backgroundColor: EVENT_TYPE_COLORS[e.event_type],
       borderColor: EVENT_TYPE_COLORS[e.event_type],
     }))

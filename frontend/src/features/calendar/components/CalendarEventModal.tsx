@@ -1,17 +1,18 @@
 import { SquareArrowOutUpRight, X } from 'lucide-react'
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import type { Task } from '@/features/tasks/types'
+import { cn } from '@/lib/utils'
 
 import { useCalendarStore } from '../store'
 import type { CalendarEvent, CalendarEventType } from '../types'
-import { EVENT_TYPE_LABELS } from '../types'
+import { EVENT_TYPE_LABELS, parseServerDate } from '../types'
 
 const EVENT_TYPES: CalendarEventType[] = ['study', 'exam', 'deadline', 'event']
 
-/** Convert UTC ISO string → datetime-local value (YYYY-MM-DDTHH:MM) in local time. */
+/** Convert a stored UTC datetime → datetime-local value (YYYY-MM-DDTHH:MM) in local time. */
 function isoToLocal(iso: string): string {
-  const d = new Date(iso)
+  const d = parseServerDate(iso)
   const pad = (n: number) => String(n).padStart(2, '0')
   return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`
 }
@@ -62,6 +63,10 @@ export function CalendarEventModal({
   const [taskId, setTaskId] = useState<string>(event?.task_id ?? '')
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState('')
+  const [confirmDelete, setConfirmDelete] = useState(false)
+  const deleteTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  useEffect(() => () => { if (deleteTimer.current) clearTimeout(deleteTimer.current) }, [])
 
   const createEvent = useCalendarStore((s) => s.createEvent)
   const updateEvent = useCalendarStore((s) => s.updateEvent)
@@ -103,7 +108,19 @@ export function CalendarEventModal({
     }
   }
 
-  async function handleDelete() {
+  // Delete is a deliberate, two-step action so it can never be triggered by a
+  // stray click. Cancel / backdrop / X only call onClose — they never mutate data.
+  function handleDeleteClick() {
+    if (!confirmDelete) {
+      setConfirmDelete(true)
+      deleteTimer.current = setTimeout(() => setConfirmDelete(false), 3500)
+      return
+    }
+    if (deleteTimer.current) clearTimeout(deleteTimer.current)
+    void performDelete()
+  }
+
+  async function performDelete() {
     if (!event) return
     setSubmitting(true)
     try {
@@ -112,6 +129,7 @@ export function CalendarEventModal({
     } catch {
       setError('Failed to delete event.')
       setSubmitting(false)
+      setConfirmDelete(false)
     }
   }
 
@@ -119,7 +137,7 @@ export function CalendarEventModal({
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       <div className="absolute inset-0 bg-[var(--overlay)]" onClick={onClose} aria-hidden="true" />
 
-      <div className="relative z-10 w-full max-w-md rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-card)] shadow-[var(--shadow-lg)]">
+      <div className="relative z-10 w-full max-w-lg rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-card)] shadow-[var(--shadow-lg)]">
         <div className="flex items-center justify-between border-b border-[var(--border-subtle)] px-7 py-5">
           <h2 className="text-2xl font-semibold tracking-tight text-[var(--text-primary)]">
             {isEdit ? 'Edit Event' : 'New Event'}
@@ -247,11 +265,16 @@ export function CalendarEventModal({
             {isEdit ? (
               <button
                 type="button"
-                onClick={handleDelete}
+                onClick={handleDeleteClick}
                 disabled={submitting}
-                className="text-[var(--text-meta)] text-[var(--color-exam)] transition-colors hover:underline disabled:opacity-50"
+                className={cn(
+                  'rounded-[var(--radius-control)] px-3 py-2 text-[var(--text-meta)] font-medium transition-colors disabled:opacity-50',
+                  confirmDelete
+                    ? 'bg-[var(--color-exam-muted)] text-[var(--color-exam)]'
+                    : 'text-[var(--color-exam)] hover:bg-[var(--color-exam-muted)]',
+                )}
               >
-                Delete event
+                {confirmDelete ? 'Click again to delete' : 'Delete event'}
               </button>
             ) : (
               <div />

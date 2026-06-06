@@ -63,9 +63,20 @@
   --control-px:   16px;
   --radius-control: 10px;
 
+  /* ── Spacing Scale (V3.1 — the canonical hierarchy) ─────────────────────── */
+  /* Use these named steps instead of ad-hoc values so spacing reads as a       */
+  /* deliberate system rather than per-component guesses.                       */
+  --space-xs: 8px;
+  --space-sm: 12px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+
   /* ── Spacing Rhythm (V3, responsive) ────────────────────────────────────── */
+  /* Panel padding never drops below the 24px card corner radius, so titles and */
+  /* content always clear the rounded corners.                                  */
   --page-margin:  clamp(20px, 1rem + 1.6vw, 48px);
-  --panel-pad:    clamp(20px, 1rem + 1vw, 32px);
+  --panel-pad:    clamp(24px, 1rem + 1vw, 32px);
   --section-gap:  clamp(20px, 1rem + 1vw, 32px);
 
   /* ── Classic Paper Palette ──────────────────────────────────────────────── */
