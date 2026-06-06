@@ -19,16 +19,16 @@ export function MethodSelector({ selected, onSelect }: MethodSelectorProps) {
           type="button"
           onClick={() => onSelect(method)}
           className={cn(
-            'rounded-lg border px-4 py-3 text-left transition-colors',
+            'rounded-[var(--radius-lg)] border px-4 py-3.5 text-left transition-colors',
             selected === method
-              ? 'border-[var(--gray-700)] bg-[var(--surface-sunken)]'
+              ? 'border-[var(--border-strong)] bg-[var(--surface-sunken)]'
               : 'border-[var(--border-subtle)] hover:border-[var(--border-default)] hover:bg-[var(--surface-sunken)]',
           )}
         >
-          <p className="text-sm font-medium text-[var(--text-primary)]">
+          <p className="text-base font-medium text-[var(--text-primary)]">
             {METHOD_LABELS[method]}
           </p>
-          <p className="mt-0.5 text-xs text-[var(--text-tertiary)]">
+          <p className="mt-0.5 text-[var(--text-meta)] text-[var(--text-tertiary)]">
             {METHOD_DESCRIPTIONS[method]}
           </p>
         </button>

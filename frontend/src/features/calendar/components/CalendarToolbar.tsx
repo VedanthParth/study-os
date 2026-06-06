@@ -24,42 +24,42 @@ export function CalendarToolbar({
   onAddEvent,
 }: CalendarToolbarProps) {
   return (
-    <div className="mb-4 flex items-center gap-3">
-      {/* Navigation */}
+    <div className="mb-6 flex flex-wrap items-center gap-x-6 gap-y-3">
+      {/* Navigation group */}
       <div className="flex items-center gap-1">
         <button
           onClick={onPrev}
-          className="rounded p-1.5 text-[var(--text-secondary)] transition-colors hover:bg-[var(--surface-sunken)] hover:text-[var(--text-primary)]"
+          className="flex h-10 w-10 items-center justify-center rounded-[var(--radius-control)] text-[var(--text-secondary)] transition-colors hover:bg-[var(--surface-sunken)] hover:text-[var(--text-primary)]"
           aria-label="Previous"
         >
-          <ChevronLeft size={16} />
+          <ChevronLeft size={18} />
         </button>
         <button
           onClick={onNext}
-          className="rounded p-1.5 text-[var(--text-secondary)] transition-colors hover:bg-[var(--surface-sunken)] hover:text-[var(--text-primary)]"
+          className="flex h-10 w-10 items-center justify-center rounded-[var(--radius-control)] text-[var(--text-secondary)] transition-colors hover:bg-[var(--surface-sunken)] hover:text-[var(--text-primary)]"
           aria-label="Next"
         >
-          <ChevronRight size={16} />
+          <ChevronRight size={18} />
         </button>
-        <button
-          onClick={onToday}
-          className="rounded-md border border-[var(--border-subtle)] px-2.5 py-1 text-xs text-[var(--text-secondary)] transition-colors hover:border-[var(--border-default)] hover:text-[var(--text-primary)]"
-        >
+        <button onClick={onToday} className="btn-secondary btn-sm ml-1.5">
           Today
         </button>
       </div>
 
-      {/* Title */}
-      <h2 className="flex-1 text-sm font-semibold text-[var(--text-primary)]">{title}</h2>
+      {/* Title — given room to breathe between the groups */}
+      <h2 className="flex-1 px-1 text-[length:var(--text-section)] font-semibold tracking-tight text-[var(--text-primary)]">
+        {title}
+      </h2>
 
-      {/* View switcher */}
-      <div className="flex items-center rounded-md border border-[var(--border-subtle)] p-0.5">
+      {/* View options + actions cluster */}
+      <div className="flex items-center gap-3">
+      <div className="flex items-center rounded-[var(--radius-control)] border border-[var(--border-default)] p-1">
         <button
           onClick={() => onViewChange('timeGridWeek')}
           className={cn(
-            'rounded px-3 py-1 text-xs transition-colors',
+            'rounded-md px-3.5 py-1.5 text-base transition-colors',
             currentView === 'timeGridWeek'
-              ? 'bg-[var(--gray-900)] text-[var(--text-inverse)]'
+              ? 'bg-[var(--button-primary-bg)] text-[var(--button-primary-text)]'
               : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]',
           )}
         >
@@ -68,24 +68,22 @@ export function CalendarToolbar({
         <button
           onClick={() => onViewChange('dayGridMonth')}
           className={cn(
-            'rounded px-3 py-1 text-xs transition-colors',
+            'rounded-md px-3.5 py-1.5 text-base transition-colors',
             currentView === 'dayGridMonth'
-              ? 'bg-[var(--gray-900)] text-[var(--text-inverse)]'
+              ? 'bg-[var(--button-primary-bg)] text-[var(--button-primary-text)]'
               : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]',
           )}
         >
           Month
         </button>
-      </div>
+        </div>
 
-      {/* Add event */}
-      <button
-        onClick={onAddEvent}
-        className="flex items-center gap-1.5 rounded-md bg-[var(--gray-900)] px-3 py-1.5 text-sm font-medium text-[var(--text-inverse)] transition-colors hover:bg-[var(--gray-700)]"
-      >
-        <Plus size={14} />
-        Add Event
-      </button>
+        {/* Add event */}
+        <button onClick={onAddEvent} className="btn-primary btn-sm">
+          <Plus size={17} />
+          Add Event
+        </button>
+      </div>
     </div>
   )
 }

@@ -69,8 +69,8 @@ export function StudyTimer({ block, secondsRemaining, totalBlockSeconds, status 
           >
             {formatTime(secondsRemaining)}
           </span>
-          <span className="text-[11px] font-medium uppercase tracking-widest text-[var(--text-tertiary)]">
-            {isPaused ? 'paused' : BLOCK_TYPE_LABELS[block.block_type].toLowerCase()}
+          <span className="label-eyebrow">
+            {isPaused ? 'Paused' : BLOCK_TYPE_LABELS[block.block_type]}
           </span>
         </div>
       </div>

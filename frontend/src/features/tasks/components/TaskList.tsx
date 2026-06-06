@@ -9,9 +9,13 @@ import { TaskCard } from './TaskCard'
 interface TaskListProps {
   tasks: Task[]
   onEdit: (task: Task) => void
+  onStartStudy?: (task: Task) => void
+  onOpenEvent?: (task: Task) => void
+  /** Set of task ids that have a linked calendar event. */
+  linkedEventTaskIds?: Set<string>
 }
 
-export function TaskList({ tasks, onEdit }: TaskListProps) {
+export function TaskList({ tasks, onEdit, onStartStudy, onOpenEvent, linkedEventTaskIds }: TaskListProps) {
   const [draggedId, setDraggedId] = useState<string | null>(null)
   const [dragOverId, setDragOverId] = useState<string | null>(null)
 
@@ -59,7 +63,7 @@ export function TaskList({ tasks, onEdit }: TaskListProps) {
   }
 
   return (
-    <div className="flex flex-col gap-1.5">
+    <div className="flex flex-col gap-2">
       {tasks.map((task) => (
         <div
           key={task.id}
@@ -74,7 +78,14 @@ export function TaskList({ tasks, onEdit }: TaskListProps) {
             dragOverId === task.id && draggedId !== task.id && 'ring-1 ring-[var(--border-default)]',
           )}
         >
-          <TaskCard task={task} onEdit={onEdit} isDragging={draggedId === task.id} />
+          <TaskCard
+            task={task}
+            onEdit={onEdit}
+            onStartStudy={onStartStudy}
+            onOpenEvent={onOpenEvent}
+            hasLinkedEvent={linkedEventTaskIds?.has(task.id) ?? false}
+            isDragging={draggedId === task.id}
+          />
         </div>
       ))}
     </div>

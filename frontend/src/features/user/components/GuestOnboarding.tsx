@@ -13,29 +13,23 @@ export function GuestOnboarding() {
   }
 
   return (
-    <div className="flex h-screen flex-col items-center justify-center gap-10 bg-[var(--surface-page)] p-10">
+    <div className="flex h-screen flex-col items-center justify-center gap-12 bg-[var(--surface-page)] p-10">
       <div className="flex flex-col items-center gap-3 text-center">
-        <span className="text-[11px] font-medium uppercase tracking-[0.2em] text-[var(--text-tertiary)]">
-          Welcome to
-        </span>
-        <h1 className="text-3xl font-semibold tracking-tight text-[var(--text-primary)]">
+        <span className="label-eyebrow">Welcome to</span>
+        <h1 className="text-[length:var(--text-page-title)] font-semibold tracking-tight text-[var(--text-primary)]">
           StudyOS
         </h1>
-        <p className="text-sm text-[var(--text-secondary)]">
+        <p className="text-lg text-[var(--text-secondary)]">
           A calm workspace for focused study
         </p>
       </div>
 
-      <div className="flex w-full max-w-[280px] flex-col items-center gap-4">
-        <button
-          onClick={handleContinue}
-          disabled={busy}
-          className="w-full rounded-xl bg-[var(--gray-900)] px-6 py-3 text-sm font-medium text-[var(--text-inverse)] transition-colors hover:bg-[var(--gray-700)] disabled:opacity-50"
-        >
+      <div className="flex w-full max-w-[320px] flex-col items-center gap-4">
+        <button onClick={handleContinue} disabled={busy} className="btn-primary w-full">
           {busy ? 'Setting up…' : 'Continue as Guest'}
         </button>
 
-        <p className="text-center text-[11px] leading-relaxed text-[var(--text-tertiary)]">
+        <p className="text-center text-[var(--text-meta)] leading-relaxed text-[var(--text-tertiary)]">
           No account needed.
           <br />
           Sign up later to sync across devices.

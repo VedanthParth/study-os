@@ -1,4 +1,4 @@
-import { ChevronDown } from 'lucide-react'
+import { ChevronDown, Plus } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 
 import { cn } from '@/lib/utils'
@@ -6,7 +6,12 @@ import { cn } from '@/lib/utils'
 import { useWorkspaceStore } from '../store'
 import { WORKSPACE_TYPE_LABELS } from '../types'
 
-export function WorkspaceSelector() {
+interface WorkspaceSelectorProps {
+  /** Optional hook to open the management modal from the dropdown footer. */
+  onManage?: () => void
+}
+
+export function WorkspaceSelector({ onManage }: WorkspaceSelectorProps) {
   const [open, setOpen] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
 
@@ -27,17 +32,19 @@ export function WorkspaceSelector() {
   if (!activeWorkspace) return null
 
   return (
-    <div ref={ref} className="relative">
+    <div ref={ref} className="relative min-w-0">
       <button
         onClick={() => setOpen((v) => !v)}
-        className="flex items-center gap-2 rounded-md border border-[var(--border-subtle)] bg-[var(--surface-card)] px-3 py-1.5 text-sm text-[var(--text-primary)] transition-colors hover:border-[var(--border-default)]"
+        className="flex min-h-[var(--control-h-sm)] items-center gap-2 rounded-[var(--radius-control)] border border-[var(--border-default)] bg-[var(--surface-card)] px-3.5 text-[var(--text-primary)] transition-colors hover:border-[var(--border-strong)]"
       >
-        <span className="max-w-[140px] truncate font-medium">{activeWorkspace.name}</span>
-        <ChevronDown size={14} className="flex-shrink-0 text-[var(--text-tertiary)]" />
+        <span className="max-w-[200px] truncate text-base font-semibold tracking-tight">
+          {activeWorkspace.name}
+        </span>
+        <ChevronDown size={16} className="flex-shrink-0 text-[var(--text-tertiary)]" />
       </button>
 
       {open && (
-        <div className="absolute left-0 top-full z-20 mt-1 w-56 rounded-md border border-[var(--border-subtle)] bg-[var(--surface-card)] py-1 shadow-[var(--shadow-md)]">
+        <div className="absolute left-0 top-full z-30 mt-1.5 w-72 overflow-hidden rounded-[var(--radius-lg)] border border-[var(--border-subtle)] bg-[var(--surface-card)] py-1.5 shadow-[var(--shadow-lg)]">
           {workspaces.map((w) => (
             <button
               key={w.id}
@@ -46,18 +53,41 @@ export function WorkspaceSelector() {
                 setOpen(false)
               }}
               className={cn(
-                'flex w-full items-center gap-2 px-3 py-2 text-left text-sm transition-colors',
+                'flex w-full items-center gap-2.5 px-4 py-2.5 text-left text-[var(--text-md)] transition-colors',
                 w.id === activeWorkspace.id
                   ? 'bg-[var(--surface-sunken)] font-medium text-[var(--text-primary)]'
                   : 'text-[var(--text-secondary)] hover:bg-[var(--surface-sunken)] hover:text-[var(--text-primary)]',
               )}
             >
+              <span
+                aria-hidden="true"
+                className={cn(
+                  'h-2 w-2 flex-shrink-0 rounded-full',
+                  w.id === activeWorkspace.id ? 'bg-[var(--accent)]' : 'bg-[var(--border-strong)]',
+                )}
+              />
               <span className="flex-1 truncate">{w.name}</span>
-              <span className="text-xs text-[var(--text-tertiary)]">
-                {WORKSPACE_TYPE_LABELS[w.type]}
+              <span className="text-[var(--text-meta)] text-[var(--text-tertiary)]">
+                {WORKSPACE_TYPE_LABELS[w.type].split(' ')[0]}
               </span>
             </button>
           ))}
+
+          {onManage && (
+            <>
+              <div className="my-1.5 border-t border-[var(--border-subtle)]" />
+              <button
+                onClick={() => {
+                  setOpen(false)
+                  onManage()
+                }}
+                className="flex w-full items-center gap-2.5 px-4 py-2.5 text-left text-[var(--text-md)] text-[var(--text-secondary)] transition-colors hover:bg-[var(--surface-sunken)] hover:text-[var(--text-primary)]"
+              >
+                <Plus size={17} />
+                New / manage workspaces
+              </button>
+            </>
+          )}
         </div>
       )}
     </div>

@@ -46,10 +46,10 @@ export function AnalyticsPage() {
         ) : loading && !overview ? (
           <LoadingState label="Loading analytics…" />
         ) : !overview ? null : (
-          <div className="flex flex-col gap-6">
+          <div className="flex flex-col gap-[var(--section-gap)]">
             {/* ── Stats ────────────────────────────────────────────────────── */}
             <SectionCard title="Progress">
-              <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+              <div className="grid grid-cols-2 gap-4 sm:grid-cols-3">
                 <StatCard
                   label="Tasks completed today"
                   value={String(overview.tasks_completed_today)}
@@ -90,11 +90,11 @@ export function AnalyticsPage() {
             </SectionCard>
 
             {/* ── Upcoming ─────────────────────────────────────────────────── */}
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+            <div className="grid grid-cols-1 gap-[var(--section-gap)] sm:grid-cols-2">
               <SectionCard title="Upcoming Deadlines">
-                <div className="flex items-center gap-1.5 pb-2">
-                  <CheckSquare size={13} className="text-[var(--text-tertiary)]" />
-                  <span className="text-xs text-[var(--text-tertiary)]">
+                <div className="flex items-center gap-2 pb-3">
+                  <CheckSquare size={16} className="text-[var(--text-tertiary)]" />
+                  <span className="text-[var(--text-meta)] text-[var(--text-tertiary)]">
                     Tasks &amp; calendar deadlines — next 7 days
                   </span>
                 </div>
@@ -105,9 +105,9 @@ export function AnalyticsPage() {
               </SectionCard>
 
               <SectionCard title="Upcoming Events">
-                <div className="flex items-center gap-1.5 pb-2">
-                  <Calendar size={13} className="text-[var(--text-tertiary)]" />
-                  <span className="text-xs text-[var(--text-tertiary)]">
+                <div className="flex items-center gap-2 pb-3">
+                  <Calendar size={16} className="text-[var(--text-tertiary)]" />
+                  <span className="text-[var(--text-meta)] text-[var(--text-tertiary)]">
                     Exams &amp; events — next 7 days
                   </span>
                 </div>
@@ -119,15 +119,15 @@ export function AnalyticsPage() {
             </div>
 
             {/* ── Metrics legend ───────────────────────────────────────────── */}
-            <div className="flex flex-wrap gap-4 text-xs text-[var(--text-tertiary)]">
-              <span className="flex items-center gap-1">
-                <Clock size={11} /> Study time counts completed sessions only
+            <div className="flex flex-wrap gap-x-6 gap-y-2 text-[var(--text-meta)] text-[var(--text-tertiary)]">
+              <span className="flex items-center gap-1.5">
+                <Clock size={13} /> Study time counts completed sessions only
               </span>
-              <span className="flex items-center gap-1">
-                <Flame size={11} /> Streak resets if no tasks completed or sessions finished in a day
+              <span className="flex items-center gap-1.5">
+                <Flame size={13} /> Streak resets if no tasks completed or sessions finished in a day
               </span>
-              <span className="flex items-center gap-1">
-                <Target size={11} /> All metrics are scoped to the active workspace
+              <span className="flex items-center gap-1.5">
+                <Target size={13} /> All metrics are scoped to the active workspace
               </span>
             </div>
           </div>

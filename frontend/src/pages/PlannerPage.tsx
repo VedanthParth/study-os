@@ -70,7 +70,7 @@ export function PlannerPage() {
           activeWorkspaceId ? (
             <button
               onClick={() => { setActivePlan(null); setMode('create') }}
-              className="rounded-md bg-[var(--gray-900)] px-3 py-1.5 text-sm font-medium text-[var(--text-inverse)] hover:bg-[var(--gray-700)]"
+              className="btn-primary btn-sm"
             >
               New Plan
             </button>
@@ -90,12 +90,10 @@ export function PlannerPage() {
         ) : (
           <div className="flex h-full gap-6">
             {/* Left: plan list */}
-            <div className="flex w-64 flex-shrink-0 flex-col gap-2">
-              <p className="text-[11px] font-semibold uppercase tracking-wider text-[var(--text-tertiary)]">
-                Plans ({plans.length})
-              </p>
+            <div className="flex w-72 flex-shrink-0 flex-col gap-2">
+              <p className="label-eyebrow mb-1">Plans ({plans.length})</p>
               {plans.length === 0 ? (
-                <p className="text-xs text-[var(--text-tertiary)]">No plans yet. Create your first plan.</p>
+                <p className="text-base text-[var(--text-tertiary)]">No plans yet. Create your first plan.</p>
               ) : (
                 plans.map((plan) => (
                   <PlanCard

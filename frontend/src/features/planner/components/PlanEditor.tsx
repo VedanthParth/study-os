@@ -96,24 +96,24 @@ export function PlanEditor({ plan, workspaceId, tasks, onSave, onCancel }: PlanE
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-5">
       <div>
-        <h2 className="mb-4 text-sm font-semibold text-[var(--text-primary)]">
+        <h2 className="mb-4 text-[length:var(--text-section)] font-semibold tracking-tight text-[var(--text-primary)]">
           {isEdit ? 'Edit Plan' : 'New Plan'}
         </h2>
 
         <div className="flex flex-col gap-3">
           <div>
-            <label className="mb-1.5 block text-xs font-medium text-[var(--text-secondary)]">Title</label>
+            <label className="field-label">Title</label>
             <input
               type="text"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               autoFocus
               placeholder="e.g. Week 1 Study Plan"
-              className="w-full rounded-md border border-[var(--border-subtle)] bg-[var(--surface-page)] px-3 py-2 text-sm text-[var(--text-primary)] focus:border-[var(--border-default)] focus:outline-none"
+              className="input"
             />
           </div>
           <div>
-            <label className="mb-1.5 block text-xs font-medium text-[var(--text-secondary)]">
+            <label className="field-label">
               Description <span className="font-normal text-[var(--text-tertiary)]">(optional)</span>
             </label>
             <textarea
@@ -121,7 +121,7 @@ export function PlanEditor({ plan, workspaceId, tasks, onSave, onCancel }: PlanE
               onChange={(e) => setDescription(e.target.value)}
               rows={2}
               placeholder="Plan goals or scope…"
-              className="w-full resize-none rounded-md border border-[var(--border-subtle)] bg-[var(--surface-page)] px-3 py-2 text-sm text-[var(--text-primary)] placeholder:text-[var(--text-tertiary)] focus:border-[var(--border-default)] focus:outline-none"
+              className="input resize-none py-3"
             />
           </div>
         </div>
@@ -188,21 +188,13 @@ export function PlanEditor({ plan, workspaceId, tasks, onSave, onCancel }: PlanE
         </div>
       )}
 
-      {error && <p className="text-xs text-[var(--color-exam)]">{error}</p>}
+      {error && <p className="text-[var(--text-meta)] text-[var(--color-exam)]">{error}</p>}
 
       <div className="flex items-center justify-end gap-2">
-        <button
-          type="button"
-          onClick={onCancel}
-          className="rounded-md px-4 py-2 text-sm text-[var(--text-secondary)] hover:bg-[var(--surface-sunken)]"
-        >
+        <button type="button" onClick={onCancel} className="btn-secondary">
           Cancel
         </button>
-        <button
-          type="submit"
-          disabled={submitting}
-          className="rounded-md bg-[var(--gray-900)] px-4 py-2 text-sm font-medium text-[var(--text-inverse)] hover:bg-[var(--gray-700)] disabled:opacity-50"
-        >
+        <button type="submit" disabled={submitting} className="btn-primary">
           {submitting ? 'Saving…' : isEdit ? 'Save Changes' : 'Create Plan'}
         </button>
       </div>

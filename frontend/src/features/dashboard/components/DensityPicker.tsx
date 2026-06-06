@@ -26,12 +26,8 @@ export function DensityPicker({ current, onChange }: DensityPickerProps) {
               isActive && 'bg-[var(--surface-sunken)]',
             )}
           >
-            <span className="text-sm text-[var(--text-primary)]">{def.label}</span>
-            {isActive && (
-              <span className="text-[10px] font-medium uppercase tracking-wider text-[var(--text-tertiary)]">
-                Active
-              </span>
-            )}
+            <span className="text-base text-[var(--text-primary)]">{def.label}</span>
+            {isActive && <span className="label-eyebrow">Active</span>}
           </button>
         )
       })}

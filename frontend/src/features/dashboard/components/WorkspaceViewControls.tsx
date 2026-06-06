@@ -48,13 +48,13 @@ export function WorkspaceViewControls({
       <button
         onClick={() => setOpen((v) => !v)}
         className={cn(
-          'flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-xs transition-colors',
+          'flex min-h-[var(--control-h-sm)] items-center gap-2 rounded-[var(--radius-control)] border px-3.5 text-base transition-colors',
           open
-            ? 'border-[var(--border-default)] bg-[var(--surface-sunken)] text-[var(--text-primary)]'
-            : 'border-[var(--border-subtle)] text-[var(--text-secondary)] hover:border-[var(--border-default)] hover:text-[var(--text-primary)]',
+            ? 'border-[var(--border-strong)] bg-[var(--surface-sunken)] text-[var(--text-primary)]'
+            : 'border-[var(--border-default)] text-[var(--text-secondary)] hover:border-[var(--border-strong)] hover:text-[var(--text-primary)]',
         )}
       >
-        <Settings2 size={13} />
+        <Settings2 size={16} />
         Customise
       </button>
 
@@ -99,9 +99,7 @@ export function WorkspaceViewControls({
                         <p className="text-xs text-[var(--text-tertiary)]">{def.description}</p>
                       </div>
                       {isActive && (
-                        <span className="mt-1 flex-shrink-0 text-[10px] font-medium uppercase tracking-wider text-[var(--text-tertiary)]">
-                          Active
-                        </span>
+                        <span className="label-eyebrow mt-1 flex-shrink-0">Active</span>
                       )}
                     </button>
                   )

@@ -1,4 +1,4 @@
-import { Check, GripVertical, Pencil, Trash2 } from 'lucide-react'
+import { CalendarClock, Check, GripVertical, Pencil, Play, Trash2 } from 'lucide-react'
 import { useRef, useState } from 'react'
 
 import { cn } from '@/lib/utils'
@@ -15,10 +15,22 @@ const PRIORITY_DOT: Record<TaskPriority, string> = {
 interface TaskCardProps {
   task: Task
   onEdit: (task: Task) => void
+  /** Start a study session pre-linked to this task (dashboard quick action). */
+  onStartStudy?: (task: Task) => void
+  /** Open the calendar event linked to this task, when one exists. */
+  onOpenEvent?: (task: Task) => void
+  hasLinkedEvent?: boolean
   isDragging?: boolean
 }
 
-export function TaskCard({ task, onEdit, isDragging = false }: TaskCardProps) {
+export function TaskCard({
+  task,
+  onEdit,
+  onStartStudy,
+  onOpenEvent,
+  hasLinkedEvent = false,
+  isDragging = false,
+}: TaskCardProps) {
   const [confirmDelete, setConfirmDelete] = useState(false)
   const [busy, setBusy] = useState(false)
   const deleteTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
@@ -60,7 +72,7 @@ export function TaskCard({ task, onEdit, isDragging = false }: TaskCardProps) {
   return (
     <div
       className={cn(
-        'group flex items-start gap-2 rounded-lg border bg-[var(--surface-card)] px-3 py-2.5 transition-colors',
+        'group flex items-start gap-2.5 rounded-[var(--radius-lg)] border bg-[var(--surface-card)] px-3.5 py-3 transition-colors',
         isDragging
           ? 'border-[var(--border-default)] opacity-60 shadow-[var(--shadow-md)]'
           : 'border-[var(--border-subtle)]',
@@ -90,7 +102,7 @@ export function TaskCard({ task, onEdit, isDragging = false }: TaskCardProps) {
       <div className="min-w-0 flex-1">
         <p
           className={cn(
-            'text-sm leading-snug text-[var(--text-primary)]',
+            'text-base leading-snug text-[var(--text-primary)]',
             task.completed && 'text-[var(--text-tertiary)] line-through',
           )}
         >
@@ -117,27 +129,49 @@ export function TaskCard({ task, onEdit, isDragging = false }: TaskCardProps) {
       />
 
       {/* Actions (visible on hover) */}
-      <div className="flex items-center gap-0.5 opacity-0 transition-opacity group-hover:opacity-100">
+      <div className="flex items-center gap-0.5 opacity-0 transition-opacity group-focus-within:opacity-100 group-hover:opacity-100">
+        {onStartStudy && !task.completed && (
+          <button
+            onClick={() => onStartStudy(task)}
+            disabled={busy}
+            className="rounded p-1.5 text-[var(--text-tertiary)] transition-colors hover:bg-[var(--surface-sunken)] hover:text-[var(--color-study)]"
+            aria-label="Start study session"
+            title="Start study session"
+          >
+            <Play size={14} />
+          </button>
+        )}
+        {onOpenEvent && hasLinkedEvent && (
+          <button
+            onClick={() => onOpenEvent(task)}
+            disabled={busy}
+            className="rounded p-1.5 text-[var(--text-tertiary)] transition-colors hover:bg-[var(--surface-sunken)] hover:text-[var(--text-secondary)]"
+            aria-label="Open linked event"
+            title="Open linked event"
+          >
+            <CalendarClock size={14} />
+          </button>
+        )}
         <button
           onClick={() => onEdit(task)}
           disabled={busy}
-          className="rounded p-1 text-[var(--text-tertiary)] transition-colors hover:bg-[var(--surface-sunken)] hover:text-[var(--text-secondary)]"
+          className="rounded p-1.5 text-[var(--text-tertiary)] transition-colors hover:bg-[var(--surface-sunken)] hover:text-[var(--text-secondary)]"
           aria-label="Edit task"
         >
-          <Pencil size={12} />
+          <Pencil size={14} />
         </button>
         <button
           onClick={handleDeleteClick}
           disabled={busy}
           className={cn(
-            'rounded px-1.5 py-1 text-xs transition-colors',
+            'rounded px-1.5 py-1.5 text-xs transition-colors',
             confirmDelete
               ? 'bg-[var(--color-exam-muted)] text-[var(--color-exam)]'
               : 'text-[var(--text-tertiary)] hover:bg-[var(--surface-sunken)] hover:text-[var(--color-exam)]',
           )}
           aria-label="Delete task"
         >
-          {confirmDelete ? 'Delete?' : <Trash2 size={12} />}
+          {confirmDelete ? 'Delete?' : <Trash2 size={14} />}
         </button>
       </div>
     </div>

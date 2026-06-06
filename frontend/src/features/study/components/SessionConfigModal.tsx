@@ -18,6 +18,8 @@ interface SessionConfigModalProps {
   method: StudyMethod
   workspaceId: string
   tasks: Task[]
+  /** Pre-link the session to a task (e.g. "Start study session" from a task). */
+  defaultTaskId?: string | null
   onClose: () => void
 }
 
@@ -25,6 +27,7 @@ export function SessionConfigModal({
   method,
   workspaceId,
   tasks,
+  defaultTaskId,
   onClose,
 }: SessionConfigModalProps) {
   const presetBlocks = method !== 'custom' ? METHOD_PRESETS[method] : []
@@ -33,7 +36,7 @@ export function SessionConfigModal({
       ? [{ block_type: 'study', duration_minutes: 25, order_index: 0 }]
       : [],
   )
-  const [taskId, setTaskId] = useState('')
+  const [taskId, setTaskId] = useState(defaultTaskId ?? '')
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState('')
 
@@ -90,19 +93,19 @@ export function SessionConfigModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-      <div className="absolute inset-0 bg-black/30" onClick={onClose} aria-hidden="true" />
+      <div className="absolute inset-0 bg-[var(--overlay)]" onClick={onClose} aria-hidden="true" />
 
-      <div className="relative z-10 w-full max-w-md rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-card)] shadow-[var(--shadow-lg)]">
-        <div className="flex items-center justify-between border-b border-[var(--border-subtle)] px-6 py-4">
-          <h2 className="text-sm font-semibold text-[var(--text-primary)]">
+      <div className="relative z-10 w-full max-w-md rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-card)] shadow-[var(--shadow-lg)]">
+        <div className="flex items-center justify-between border-b border-[var(--border-subtle)] px-7 py-5">
+          <h2 className="text-2xl font-semibold tracking-tight text-[var(--text-primary)]">
             {METHOD_LABELS[method]}
           </h2>
-          <button onClick={onClose} className="rounded p-1 text-[var(--text-tertiary)] hover:text-[var(--text-primary)]" aria-label="Close">
-            <X size={16} />
+          <button onClick={onClose} className="flex h-10 w-10 items-center justify-center rounded-[var(--radius-control)] text-[var(--text-tertiary)] transition-colors hover:bg-[var(--surface-sunken)] hover:text-[var(--text-primary)]" aria-label="Close">
+            <X size={20} />
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="flex flex-col gap-5 px-6 py-5">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-5 px-7 py-6">
           {/* Block list */}
           <div>
             <p className="mb-2 text-xs font-medium text-[var(--text-secondary)]">
@@ -182,14 +185,14 @@ export function SessionConfigModal({
           {/* Optional task link */}
           {tasks.length > 0 && (
             <div>
-              <label htmlFor="study-task" className="mb-1.5 block text-xs font-medium text-[var(--text-secondary)]">
+              <label htmlFor="study-task" className="field-label">
                 Link Task <span className="font-normal text-[var(--text-tertiary)]">(optional)</span>
               </label>
               <select
                 id="study-task"
                 value={taskId}
                 onChange={(e) => setTaskId(e.target.value)}
-                className="w-full rounded-md border border-[var(--border-subtle)] bg-[var(--surface-page)] px-3 py-2 text-sm text-[var(--text-primary)] focus:border-[var(--border-default)] focus:outline-none"
+                className="input"
               >
                 <option value="">None</option>
                 {tasks.filter((t) => !t.completed).map((t) => (
@@ -201,18 +204,10 @@ export function SessionConfigModal({
 
           {/* Actions */}
           <div className="flex items-center justify-end gap-2 pt-1">
-            <button
-              type="button"
-              onClick={onClose}
-              className="rounded-md px-4 py-2 text-sm text-[var(--text-secondary)] hover:bg-[var(--surface-sunken)] hover:text-[var(--text-primary)]"
-            >
+            <button type="button" onClick={onClose} className="btn-secondary">
               Cancel
             </button>
-            <button
-              type="submit"
-              disabled={submitting}
-              className="rounded-md bg-[var(--gray-900)] px-4 py-2 text-sm font-medium text-[var(--text-inverse)] hover:bg-[var(--gray-700)] disabled:opacity-50"
-            >
+            <button type="submit" disabled={submitting} className="btn-primary">
               {submitting ? 'Starting…' : 'Start Session'}
             </button>
           </div>

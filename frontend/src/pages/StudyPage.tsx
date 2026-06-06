@@ -91,26 +91,22 @@ export function StudyPage() {
         {/* ── Completed state ── */}
         {isCompleted && (
           <div className="flex flex-col items-center gap-6 py-16 text-center">
-            <div className="flex h-16 w-16 items-center justify-center rounded-full bg-[var(--color-success-muted)]">
-              <BookOpen size={28} style={{ color: 'var(--color-success)' }} />
+            <div className="flex h-20 w-20 items-center justify-center rounded-full bg-[var(--color-success-muted)]">
+              <BookOpen size={34} style={{ color: 'var(--color-success)' }} />
             </div>
             <div>
-              <h2 className="text-lg font-semibold text-[var(--text-primary)]">Session complete</h2>
-              <p className="mt-1 text-sm text-[var(--text-tertiary)]">
+              <h2 className="text-[length:var(--text-widget-title)] font-semibold tracking-tight text-[var(--text-primary)]">
+                Session complete
+              </h2>
+              <p className="mt-2 text-base text-[var(--text-tertiary)]">
                 Great work. Ready for another?
               </p>
             </div>
             <div className="flex items-center gap-3">
-              <button
-                onClick={() => { setShowConfig(true) }}
-                className="rounded-lg bg-[var(--gray-900)] px-5 py-2.5 text-sm font-medium text-[var(--text-inverse)] hover:bg-[var(--gray-700)]"
-              >
+              <button onClick={() => { setShowConfig(true) }} className="btn-primary">
                 Start New Session
               </button>
-              <button
-                onClick={dismissCompletion}
-                className="rounded-lg border border-[var(--border-subtle)] px-5 py-2.5 text-sm text-[var(--text-secondary)] hover:border-[var(--border-default)]"
-              >
+              <button onClick={dismissCompletion} className="btn-secondary">
                 Dismiss
               </button>
             </div>
@@ -122,7 +118,7 @@ export function StudyPage() {
           <div className="flex flex-col items-center gap-6 py-10">
             {/* Session meta */}
             <div className="text-center">
-              <p className="text-xs font-medium uppercase tracking-wider text-[var(--text-tertiary)]">
+              <p className="label-eyebrow">
                 {METHOD_LABELS[activeSession.method]}
                 {activeSession.task_id && tasks.find(t => t.id === activeSession.task_id) && (
                   <span className="ml-2 normal-case">
@@ -157,10 +153,10 @@ export function StudyPage() {
         {!hasActiveSession && !isCompleted && (
           <div className="flex flex-col gap-6">
             <div>
-              <h2 className="mb-1 text-sm font-semibold text-[var(--text-primary)]">
+              <h2 className="mb-1 text-[length:var(--text-section)] font-semibold tracking-tight text-[var(--text-primary)]">
                 Choose a study method
               </h2>
-              <p className="text-xs text-[var(--text-tertiary)]">
+              <p className="text-base text-[var(--text-tertiary)]">
                 Pick a structure that fits your session.
               </p>
             </div>
@@ -168,10 +164,7 @@ export function StudyPage() {
             <MethodSelector selected={selectedMethod} onSelect={setSelectedMethod} />
 
             <div>
-              <button
-                onClick={() => setShowConfig(true)}
-                className="rounded-lg bg-[var(--gray-900)] px-6 py-2.5 text-sm font-medium text-[var(--text-inverse)] transition-colors hover:bg-[var(--gray-700)]"
-              >
+              <button onClick={() => setShowConfig(true)} className="btn-primary">
                 Configure &amp; Start
               </button>
             </div>

@@ -26,14 +26,14 @@ export function UpcomingItemsList({ items, emptyMessage }: UpcomingItemsListProp
     <ul className="flex flex-col divide-y divide-[var(--border-subtle)]">
       {items.map((item) => (
         <li key={item.id} className="flex items-center justify-between py-2">
-          <span className="mr-3 min-w-0 flex-1 truncate text-sm text-[var(--text-primary)]">
+          <span className="mr-3 min-w-0 flex-1 truncate text-base text-[var(--text-primary)]">
             {item.title}
           </span>
-          <div className="flex flex-shrink-0 items-center gap-2">
-            <span className="text-[10px] font-medium uppercase tracking-wider text-[var(--text-tertiary)]">
+          <div className="flex flex-shrink-0 items-center gap-2.5">
+            <span className="text-[11px] font-medium uppercase text-[var(--text-tertiary)]">
               {ITEM_TYPE_LABELS[item.item_type]}
             </span>
-            <span className="text-xs text-[var(--text-secondary)]">
+            <span className="text-[var(--text-meta)] text-[var(--text-secondary)]">
               {formatShortDate(item.date)}
             </span>
           </div>

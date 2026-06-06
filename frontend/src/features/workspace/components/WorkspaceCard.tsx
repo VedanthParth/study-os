@@ -86,7 +86,7 @@ export function WorkspaceCard({
     >
       {/* Active badge */}
       {isActive && (
-        <span className="absolute right-4 top-4 rounded-full bg-[var(--gray-900)] px-2 py-0.5 text-[10px] font-medium uppercase tracking-wider text-[var(--text-inverse)]">
+        <span className="absolute right-4 top-4 rounded-full bg-[var(--button-primary-bg)] px-2.5 py-0.5 text-[11px] font-medium uppercase text-[var(--button-primary-text)]">
           Active
         </span>
       )}
@@ -124,16 +124,13 @@ export function WorkspaceCard({
           </button>
         </div>
       ) : (
-        <p className="text-sm font-semibold text-[var(--text-primary)]">{workspace.name}</p>
+        <p className="text-lg font-semibold text-[var(--text-primary)]">{workspace.name}</p>
       )}
 
       {/* Actions */}
       <div className="mt-auto flex items-center gap-1 pt-1">
         {!isActive && (
-          <button
-            onClick={() => onActivate(workspace)}
-            className="mr-auto rounded-md border border-[var(--border-subtle)] px-3 py-1.5 text-xs text-[var(--text-secondary)] transition-colors hover:border-[var(--border-default)] hover:text-[var(--text-primary)]"
-          >
+          <button onClick={() => onActivate(workspace)} className="btn-secondary btn-sm mr-auto">
             Switch
           </button>
         )}

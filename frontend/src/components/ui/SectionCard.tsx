@@ -12,12 +12,12 @@ export function SectionCard({ children, className, title }: SectionCardProps) {
   return (
     <section
       className={cn(
-        'rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-card)] p-6',
+        'rounded-[var(--radius-2xl)] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-[var(--panel-pad)] shadow-[var(--shadow-sm)]',
         className,
       )}
     >
       {title && (
-        <h3 className="mb-5 text-xs font-medium uppercase tracking-widest text-[var(--text-tertiary)]">
+        <h3 className="mb-5 text-[length:var(--text-section)] font-semibold tracking-tight text-[var(--text-primary)]">
           {title}
         </h3>
       )}

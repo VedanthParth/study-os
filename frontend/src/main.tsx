@@ -6,6 +6,11 @@ import { createRoot } from 'react-dom/client'
 import { RouterProvider } from 'react-router-dom'
 
 import { router } from '@/routes'
+import { applyTheme, useSettingsStore } from '@/store/settingsStore'
+
+// Apply the persisted theme before the first paint to avoid a flash of the
+// wrong palette. The store reads the same localStorage value on init.
+applyTheme(useSettingsStore.getState().theme)
 
 const queryClient = new QueryClient({
   defaultOptions: {

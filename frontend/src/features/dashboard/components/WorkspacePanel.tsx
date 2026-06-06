@@ -1,27 +1,32 @@
-import { Link } from 'react-router-dom'
+import { Settings2 } from 'lucide-react'
 
-import { ROUTES } from '@/constants'
 import { WorkspaceSelector } from '@/features/workspace/components/WorkspaceSelector'
 import { useWorkspaceStore } from '@/features/workspace/store'
 import { WORKSPACE_TYPE_LABELS } from '@/features/workspace/types'
 
-export function WorkspacePanel() {
+interface WorkspacePanelProps {
+  /** Opens the workspace management modal (create / rename / delete / switch). */
+  onManage: () => void
+}
+
+export function WorkspacePanel({ onManage }: WorkspacePanelProps) {
   const activeWorkspace = useWorkspaceStore((s) => s.activeWorkspace)
 
   return (
-    <div className="flex items-center gap-3">
-      <WorkspaceSelector />
+    <div className="flex min-w-0 items-center gap-3">
+      <WorkspaceSelector onManage={onManage} />
       {activeWorkspace && (
-        <span className="hidden text-xs text-[var(--text-tertiary)] sm:block">
+        <span className="label-eyebrow hidden sm:block">
           {WORKSPACE_TYPE_LABELS[activeWorkspace.type]}
         </span>
       )}
-      <Link
-        to={ROUTES.WORKSPACE}
-        className="text-xs text-[var(--text-tertiary)] transition-colors hover:text-[var(--text-secondary)]"
+      <button
+        onClick={onManage}
+        className="flex items-center gap-1.5 text-[var(--text-meta)] text-[var(--text-tertiary)] transition-colors hover:text-[var(--text-secondary)]"
       >
+        <Settings2 size={15} />
         Manage
-      </Link>
+      </button>
     </div>
   )
 }

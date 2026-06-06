@@ -13,30 +13,24 @@ export function SessionControls({ status, onPause, onResume, onStop }: SessionCo
   return (
     <div className="flex items-center justify-center gap-3">
       {status === 'running' && (
-        <button
-          onClick={onPause}
-          className="flex items-center gap-2 rounded-lg border border-[var(--border-subtle)] bg-[var(--surface-card)] px-5 py-2.5 text-sm font-medium text-[var(--text-secondary)] transition-colors hover:border-[var(--border-default)] hover:text-[var(--text-primary)]"
-        >
-          <Pause size={14} />
+        <button onClick={onPause} className="btn-secondary">
+          <Pause size={17} />
           Pause
         </button>
       )}
 
       {status === 'paused' && (
-        <button
-          onClick={onResume}
-          className="flex items-center gap-2 rounded-lg bg-[var(--gray-900)] px-5 py-2.5 text-sm font-medium text-[var(--text-inverse)] transition-colors hover:bg-[var(--gray-700)]"
-        >
-          <Play size={14} />
+        <button onClick={onResume} className="btn-primary">
+          <Play size={17} />
           Resume
         </button>
       )}
 
       <button
         onClick={onStop}
-        className="flex items-center gap-2 rounded-lg border border-[var(--border-subtle)] px-5 py-2.5 text-sm font-medium text-[var(--text-tertiary)] transition-colors hover:border-[var(--color-exam-muted)] hover:text-[var(--color-exam)]"
+        className="btn-secondary text-[var(--text-tertiary)] hover:border-[var(--color-exam)] hover:text-[var(--color-exam)]"
       >
-        <Square size={14} />
+        <Square size={17} />
         Stop
       </button>
     </div>

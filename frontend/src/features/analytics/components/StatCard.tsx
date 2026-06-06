@@ -8,13 +8,11 @@ interface StatCardProps {
 
 export function StatCard({ label, value, dim = false }: StatCardProps) {
   return (
-    <div className="flex flex-col gap-1 rounded-lg bg-[var(--surface-sunken)] px-3 py-3">
-      <span className="text-[10px] font-medium uppercase tracking-widest text-[var(--text-tertiary)]">
-        {label}
-      </span>
+    <div className="flex flex-col gap-2.5 rounded-[var(--radius-lg)] bg-[var(--surface-sunken)] px-5 py-5">
+      <span className="label-eyebrow">{label}</span>
       <span
         className={cn(
-          'text-base font-semibold tabular-nums leading-tight',
+          'text-2xl font-semibold tabular-nums leading-none tracking-tight',
           dim ? 'text-[var(--text-tertiary)]' : 'text-[var(--text-primary)]',
         )}
       >

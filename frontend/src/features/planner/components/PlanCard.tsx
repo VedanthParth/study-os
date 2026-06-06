@@ -25,7 +25,7 @@ export function PlanCard({ plan, isActive, onSelect, onDelete }: PlanCardProps) 
       onClick={() => onSelect(plan)}
     >
       <div className="flex items-start justify-between gap-2">
-        <p className="min-w-0 flex-1 truncate text-sm font-medium text-[var(--text-primary)]">
+        <p className="min-w-0 flex-1 truncate text-base font-medium text-[var(--text-primary)]">
           {plan.title}
         </p>
         <button

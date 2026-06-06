@@ -27,22 +27,46 @@
   --text-xs: 11px;
   --text-sm: 13px;
   --text-base: 15px;
-  --text-md: 16px;
+  --text-md: 16px;     /* body text */
   --text-lg: 18px;
   --text-xl: 20px;
   --text-2xl: 24px;
   --text-3xl: 30px;
   --text-4xl: 36px;
 
+  /* ── Responsive Display Scale (V3) ──────────────────────────────────────── */
+  /* clamp(min, fluid, max) — titles grow with the viewport so large screens   */
+  /* feel like an open planner, while small screens stay readable.             */
+  --text-page-title:   clamp(2.25rem, 1.7rem + 1.9vw, 3rem);    /* 36 → 48px — dominant */
+  --text-widget-title: clamp(1.625rem, 1.45rem + 0.9vw, 2rem);  /* 26 → 32px — supports content */
+  --text-section:      clamp(1.0625rem, 1rem + 0.3vw, 1.1875rem); /* 17 → 19px — section labels */
+  --text-body:         16px;                                    /* reading size */
+  --text-meta:         13px;                                    /* metadata    */
+
   --leading-tight: 1.25;
   --leading-snug: 1.375;
   --leading-normal: 1.5;
   --leading-relaxed: 1.625;
 
+  --tracking-label: 0.08em;  /* small uppercase section labels only */
+
   --font-normal: 400;
   --font-medium: 500;
   --font-semibold: 600;
   --font-bold: 700;
+
+  /* ── Control Scale (V3) ─────────────────────────────────────────────────── */
+  /* Generous hit areas for long study sessions.                              */
+  --control-h-sm: 36px;
+  --control-h:    44px;
+  --control-h-lg: 48px;
+  --control-px:   16px;
+  --radius-control: 10px;
+
+  /* ── Spacing Rhythm (V3, responsive) ────────────────────────────────────── */
+  --page-margin:  clamp(20px, 1rem + 1.6vw, 48px);
+  --panel-pad:    clamp(20px, 1rem + 1vw, 32px);
+  --section-gap:  clamp(20px, 1rem + 1vw, 32px);
 
   /* ── Classic Paper Palette ──────────────────────────────────────────────── */
   /* Warm ivory tones — each step adds a touch of amber warmth.              */
@@ -69,7 +93,7 @@
   --color-exam: #b84e56;        /* deep rose-ink — high-stakes events       */
   --color-exam-muted: #f8e8e9;
 
-  --color-deadline: #a87038;    /* amber-ink — deadlines                    */
+  --color-deadline: #a87038;    /* amber-ink — deadlines / brass            */
   --color-deadline-muted: #f5ead9;
 
   --color-planner: #5e7499;     /* slate-ink — planning / scheduling        */
@@ -104,4 +128,81 @@
   --shadow-sm: 0 1px 3px rgba(110, 80, 50, 0.07);
   --shadow-md: 0 2px 8px rgba(110, 80, 50, 0.09);
   --shadow-lg: 0 4px 20px rgba(110, 80, 50, 0.11);
+
+  /* ── Semantic Interactive Tokens ────────────────────────────────────────── */
+  /* These invert in dark mode — components should reference these instead of */
+  /* raw --gray-* so primary actions read correctly in both themes.          */
+  --button-primary-bg:        var(--gray-900);
+  --button-primary-bg-hover:  var(--gray-700);
+  --button-primary-text:      var(--text-inverse);
+
+  --accent:        var(--color-study);
+  --accent-muted:  var(--color-study-muted);
+
+  /* Modal scrim — warm ink, never pure black */
+  --overlay: rgba(30, 26, 22, 0.35);
+
+  /* Theme-agnostic alias for the focus/active accent bar */
+  --focus-ring: var(--color-study);
+}
+
+/* ── Library After Dark (Dark Mode) ───────────────────────────────────────── */
+/* Late-night studying in a library: warm charcoal desk, leather panels,      */
+/* parchment ink, brass highlights. No pure black, no pure white.             */
+[data-theme='dark'] {
+  /* Warm charcoal scale (inverted intent of the paper scale) */
+  --gray-0:   #14110e;    /* deepest — backdrop wells              */
+  --gray-50:  #1a1714;    /* warm charcoal — page (the dark desk)  */
+  --gray-100: #211d19;    /* leather panel base                    */
+  --gray-150: #272320;    /* raised surface                        */
+  --gray-200: #322c27;    /* subtle border                         */
+  --gray-300: #423a33;    /* medium border                         */
+  --gray-400: #6b6157;    /* muted — icons, placeholder            */
+  --gray-500: #908579;    /* secondary labels                      */
+  --gray-600: #b3a795;    /* secondary body text                   */
+  --gray-700: #cbbfac;    /* strong text                           */
+  --gray-800: #ddd2bf;    /* near-parchment                        */
+  --gray-900: #e9ddc8;    /* parchment — primary text              */
+  --gray-950: #f3e9d6;    /* brightest parchment                   */
+
+  /* Accents — slightly lifted for contrast on dark leather */
+  --color-study: #7aa6cf;       --color-study-muted: #232c34;
+  --color-exam: #d4848b;        --color-exam-muted: #36262a;
+  --color-deadline: #c79a5e;    --color-deadline-muted: #352b1d;  /* brass */
+  --color-planner: #8ea2c4;     --color-planner-muted: #262d38;
+  --color-success: #7bae93;     --color-success-muted: #1f2c26;
+  --color-muted: var(--gray-400);
+
+  /* Surfaces — desk is charcoal, panels are leather (a touch lighter) */
+  --surface-page:   var(--gray-50);
+  --surface-card:   #211d19;
+  --surface-raised: #272320;
+  --surface-sunken: #1e1a16;
+
+  /* Borders */
+  --border-subtle:  var(--gray-200);
+  --border-default: var(--gray-300);
+  --border-strong:  var(--gray-400);
+
+  /* Text */
+  --text-primary:   var(--gray-900);
+  --text-secondary: var(--gray-600);
+  --text-tertiary:  var(--gray-500);
+  --text-inverse:   #1a1714;   /* charcoal on parchment buttons */
+
+  /* Shadows — deeper, cooler ambient for night */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.35);
+  --shadow-md: 0 2px 10px rgba(0, 0, 0, 0.45);
+  --shadow-lg: 0 6px 28px rgba(0, 0, 0, 0.55);
+
+  /* Interactive — parchment-on-charcoal primary button */
+  --button-primary-bg:        var(--gray-900);
+  --button-primary-bg-hover:  var(--gray-700);
+  --button-primary-text:      var(--text-inverse);
+
+  --accent:        var(--color-study);
+  --accent-muted:  var(--color-study-muted);
+
+  --overlay: rgba(0, 0, 0, 0.6);
+  --focus-ring: var(--color-study);
 }

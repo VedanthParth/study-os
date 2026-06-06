@@ -39,19 +39,18 @@ export function PlanViewer({ plan, onEditPlan }: PlanViewerProps) {
       {/* Plan header */}
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0 flex-1">
-          <h2 className="text-base font-semibold text-[var(--text-primary)]">{plan.title}</h2>
+          <h2 className="text-[length:var(--text-widget-title)] font-semibold tracking-tight text-[var(--text-primary)]">
+            {plan.title}
+          </h2>
           {plan.description && (
-            <p className="mt-0.5 text-sm text-[var(--text-tertiary)]">{plan.description}</p>
+            <p className="mt-1 text-base text-[var(--text-tertiary)]">{plan.description}</p>
           )}
-          <p className="mt-1 text-xs text-[var(--text-tertiary)]">
+          <p className="mt-1.5 text-[var(--text-meta)] text-[var(--text-tertiary)]">
             {completedCount} / {plan.items.length} completed
           </p>
         </div>
-        <button
-          onClick={onEditPlan}
-          className="flex flex-shrink-0 items-center gap-1.5 rounded-md border border-[var(--border-subtle)] px-3 py-1.5 text-xs text-[var(--text-secondary)] transition-colors hover:border-[var(--border-default)] hover:text-[var(--text-primary)]"
-        >
-          <Pencil size={12} />
+        <button onClick={onEditPlan} className="btn-secondary btn-sm flex-shrink-0">
+          <Pencil size={15} />
           Edit
         </button>
       </div>
