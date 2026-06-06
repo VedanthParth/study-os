@@ -73,6 +73,7 @@ export function AnalyticsPanel() {
     <DashboardPanel
       title="Analytics"
       icon={<TrendingUp size={20} strokeWidth={1.75} />}
+      padded={false}
       footer={
         <>
           <PanelFooterSummary>

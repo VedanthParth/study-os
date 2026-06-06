@@ -100,7 +100,7 @@ export function StudyPanel() {
       }
     >
       {isCompleted && (
-        <div className="flex flex-col items-center gap-5 p-[var(--panel-pad)] text-center">
+        <div className="flex flex-col items-center gap-5 text-center">
           <p className="text-lg font-medium text-[var(--text-primary)]">Session complete!</p>
           <div className="flex gap-2">
             <button onClick={() => openStudy({ method: selectedMethod })} className="btn-primary btn-sm">
@@ -120,7 +120,7 @@ export function StudyPanel() {
       )}
 
       {hasActiveSession && currentBlock && (
-        <div className="flex flex-col items-center gap-5 p-[var(--panel-pad)]">
+        <div className="flex flex-col items-center gap-5">
           <p className="label-eyebrow">
             {METHOD_LABELS[activeSession.method]}
             {linkedTask && <span className="ml-1 normal-case">· {linkedTask.title}</span>}
@@ -151,7 +151,7 @@ export function StudyPanel() {
       )}
 
       {!hasActiveSession && !isCompleted && (
-        <div className="flex flex-col gap-5 p-[var(--panel-pad)]">
+        <div className="flex flex-col gap-5">
           {lastSession && (
             <button onClick={repeatLast} className="btn-secondary self-start">
               <RotateCcw size={17} />

@@ -21,10 +21,28 @@ interface DashboardPanelProps {
   actions?: ReactNode
   footer?: ReactNode
   children: ReactNode
+  /**
+   * Apply the standard panel content padding (default true). Set false for
+   * panels that manage full-bleed sections internally (e.g. Analytics dividers).
+   */
+  padded?: boolean
   className?: string
 }
 
-export function DashboardPanel({ title, icon, actions, footer, children, className }: DashboardPanelProps) {
+/**
+ * The single source of truth for dashboard panel spacing. Header, content, and
+ * footer padding all derive from --panel-pad here, so widgets stay cohesive and
+ * never need their own spacing overrides.
+ */
+export function DashboardPanel({
+  title,
+  icon,
+  actions,
+  footer,
+  children,
+  padded = true,
+  className,
+}: DashboardPanelProps) {
   const [collapsed, setCollapsed] = useState(false)
 
   return (
@@ -35,7 +53,7 @@ export function DashboardPanel({ title, icon, actions, footer, children, classNa
       )}
     >
       {/* PanelHeader — title framed by whitespace, not pinned to the edge */}
-      <div className="flex flex-shrink-0 items-center justify-between gap-4 border-b border-[var(--border-subtle)] px-[var(--panel-pad)] py-5">
+      <div className="flex flex-shrink-0 items-center justify-between gap-4 border-b border-[var(--border-subtle)] px-[var(--panel-pad)] py-[var(--space-lg)]">
         <div className="flex min-w-0 items-center gap-2.5">
           {icon && <span className="flex-shrink-0 text-[var(--text-tertiary)]">{icon}</span>}
           <h2 className="truncate text-[length:var(--text-widget-title)] font-semibold tracking-tight text-[var(--text-primary)]">
@@ -55,11 +73,15 @@ export function DashboardPanel({ title, icon, actions, footer, children, classNa
       </div>
 
       {/* PanelContainer */}
-      {!collapsed && <div className="min-h-0 flex-1 overflow-y-auto">{children}</div>}
+      {!collapsed && (
+        <div className={cn('min-h-0 flex-1 overflow-y-auto', padded && 'p-[var(--panel-pad)]')}>
+          {children}
+        </div>
+      )}
 
       {/* PanelFooter — summary + continuity link */}
       {!collapsed && footer && (
-        <div className="flex flex-shrink-0 items-center justify-between gap-3 border-t border-[var(--border-subtle)] px-[var(--panel-pad)] py-3.5 text-[var(--text-meta)]">
+        <div className="flex flex-shrink-0 items-center justify-between gap-3 border-t border-[var(--border-subtle)] px-[var(--panel-pad)] py-[var(--space-md)] text-[var(--text-meta)]">
           {footer}
         </div>
       )}

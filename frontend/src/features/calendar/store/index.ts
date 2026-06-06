@@ -1,5 +1,7 @@
 import { create } from 'zustand'
 
+import { useAnalyticsStore } from '@/features/analytics/store'
+
 import { calendarApi } from '../api'
 import type {
   CalendarEvent,
@@ -37,6 +39,7 @@ export const useCalendarStore = create<CalendarState & CalendarActions>((set) =>
   createEvent: async (payload) => {
     const event = await calendarApi.createEvent(payload)
     set((state) => ({ events: [...state.events, event] }))
+    void useAnalyticsStore.getState().refresh()
     return event
   },
 
@@ -45,12 +48,14 @@ export const useCalendarStore = create<CalendarState & CalendarActions>((set) =>
     set((state) => ({
       events: state.events.map((e) => (e.id === id ? updated : e)),
     }))
+    void useAnalyticsStore.getState().refresh()
     return updated
   },
 
   deleteEvent: async (id) => {
     await calendarApi.deleteEvent(id)
     set((state) => ({ events: state.events.filter((e) => e.id !== id) }))
+    void useAnalyticsStore.getState().refresh()
   },
 
   clearEvents: () => set({ events: [] }),

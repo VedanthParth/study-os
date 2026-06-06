@@ -1,5 +1,7 @@
 import { create } from 'zustand'
 
+import { useAnalyticsStore } from '@/features/analytics/store'
+
 import { studyApi } from '../api'
 import type {
   PersistedStudyState,
@@ -106,6 +108,8 @@ export const useStudyStore = create<StudyState & StudyActions>((set, get) => ({
       timer: { ...IDLE_TIMER, status: finalStatus },
       sessionHistory: [updated, ...state.sessionHistory],
     }))
+    // A finished session feeds study-time / sessions / streak analytics.
+    void useAnalyticsStore.getState().refresh()
   },
 
   tick: () => {

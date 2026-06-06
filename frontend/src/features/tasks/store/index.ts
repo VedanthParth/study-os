@@ -1,5 +1,7 @@
 import { create } from 'zustand'
 
+import { useAnalyticsStore } from '@/features/analytics/store'
+
 import { taskApi } from '../api'
 import type { CreateTaskPayload, ReorderTasksPayload, Task, UpdateTaskPayload } from '../types'
 
@@ -34,6 +36,7 @@ export const useTaskStore = create<TaskState & TaskActions>((set) => ({
   createTask: async (payload) => {
     const task = await taskApi.createTask(payload)
     set((state) => ({ tasks: [...state.tasks, task] }))
+    void useAnalyticsStore.getState().refresh()
     return task
   },
 
@@ -42,12 +45,15 @@ export const useTaskStore = create<TaskState & TaskActions>((set) => ({
     set((state) => ({
       tasks: state.tasks.map((t) => (t.id === id ? updated : t)),
     }))
+    // due_date / completion changes feed Analytics & Upcoming Deadlines.
+    void useAnalyticsStore.getState().refresh()
     return updated
   },
 
   deleteTask: async (id) => {
     await taskApi.deleteTask(id)
     set((state) => ({ tasks: state.tasks.filter((t) => t.id !== id) }))
+    void useAnalyticsStore.getState().refresh()
   },
 
   reorderTasks: async (payload) => {

@@ -60,7 +60,7 @@ export function TaskPanel() {
         </PanelFooterSummary>
       }
     >
-      <div className="flex flex-col gap-4 p-[var(--panel-pad)]">
+      <div className="flex flex-col gap-4">
         <TaskInput ref={inputRef} workspaceId={activeWorkspace.id} />
 
         {loading ? (
