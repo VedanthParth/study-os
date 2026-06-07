@@ -34,9 +34,9 @@ export const LAYOUT_DEFINITIONS: Record<LayoutType, LayoutDefinition> = {
   overview: {
     key: 'overview',
     label: 'Overview',
-    description: 'Tasks and calendar on the left, study and analytics on the right',
-    leftWidgets: ['tasks', 'calendar'],
-    rightWidgets: ['study', 'analytics'],
+    description: 'Calendar takes the stage; tasks, study and analytics sit alongside',
+    leftWidgets: ['calendar'],
+    rightWidgets: ['tasks', 'study', 'analytics'],
     defaultWidgets: ['calendar', 'tasks', 'study', 'analytics'],
   },
   planning: {
@@ -59,8 +59,8 @@ export const LAYOUT_DEFINITIONS: Record<LayoutType, LayoutDefinition> = {
     key: 'custom',
     label: 'Custom',
     description: 'Choose exactly which widgets to show',
-    leftWidgets: ['tasks', 'calendar'],
-    rightWidgets: ['study', 'analytics'],
+    leftWidgets: ['calendar'],
+    rightWidgets: ['tasks', 'study', 'analytics'],
     defaultWidgets: ['calendar', 'tasks', 'study', 'analytics'],
   },
 }
@@ -114,9 +114,9 @@ export interface DensityDefinition {
 }
 
 export const DENSITY_DEFINITIONS: Record<WidgetDensity, DensityDefinition> = {
-  compact:  { key: 'compact',  label: 'Compact',  gap: '12px', padding: '12px' },
-  balanced: { key: 'balanced', label: 'Balanced', gap: '20px', padding: '20px' },
-  expanded: { key: 'expanded', label: 'Expanded', gap: '28px', padding: '28px' },
+  compact:  { key: 'compact',  label: 'Compact',  gap: '18px', padding: '18px' },
+  balanced: { key: 'balanced', label: 'Balanced', gap: '28px', padding: '28px' },
+  expanded: { key: 'expanded', label: 'Expanded', gap: '40px', padding: '40px' },
 }
 
 // ── localStorage key ───────────────────────────────────────────────────────

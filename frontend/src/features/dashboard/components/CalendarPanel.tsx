@@ -55,7 +55,7 @@ export function CalendarPanel() {
         </>
       }
     >
-      <div className="flex flex-col gap-0">
+      <div className="flex flex-col">
         <CalendarToolbar
           title={calendarTitle}
           currentView={currentView}

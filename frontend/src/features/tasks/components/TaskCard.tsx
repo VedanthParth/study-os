@@ -73,7 +73,7 @@ export function TaskCard({
   return (
     <div
       className={cn(
-        'group flex items-start gap-2 rounded-[var(--radius-md)] border px-2.5 py-2 transition-colors',
+        'group flex items-start gap-3 rounded-[var(--radius-md)] border px-4 py-3 transition-colors',
         isDragging
           ? 'border-[var(--border-default)] opacity-60 shadow-[var(--shadow-md)]'
           : 'border-[var(--border-subtle)] bg-[var(--surface-card)] hover:border-[var(--border-default)]',
@@ -121,7 +121,7 @@ export function TaskCard({
       {dueDateLabel && (
         <span
           className={cn(
-            'mt-0.5 inline-flex flex-shrink-0 items-center gap-1 rounded-[var(--radius-sm)] px-1.5 py-0.5 text-[11px] font-medium',
+            'mt-0.5 inline-flex flex-shrink-0 items-center gap-1 rounded-[var(--radius-chip)] px-1.5 py-0.5 text-[11px] font-medium',
             isOverdue
               ? 'bg-[var(--color-exam-muted)] text-[var(--color-exam)]'
               : 'bg-[var(--surface-sunken)] text-[var(--text-secondary)]',

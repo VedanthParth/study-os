@@ -48,7 +48,7 @@ export function AnalyticsPanel() {
           onClick={onClick ?? undefined}
           disabled={!onClick}
           className={cn(
-            'group flex w-full items-center gap-2 rounded-[var(--radius-md)] px-2 py-1.5 text-left transition-colors',
+            'group flex w-full items-center gap-2 rounded-[var(--radius-md)] px-3 py-2.5 text-left transition-colors',
             onClick ? 'hover:bg-[var(--surface-sunken)]' : 'cursor-default',
           )}
         >
@@ -115,7 +115,7 @@ export function AnalyticsPanel() {
 
           {/* Upcoming section */}
           {hasUpcoming && (
-            <div className="border-t border-[var(--border-subtle)] px-[var(--panel-pad)] py-4">
+            <div className="border-t border-[var(--border-subtle)] px-[var(--panel-pad)] py-[var(--space-lg)]">
               {upcomingDeadlines.length > 0 && (
                 <div className="mb-3">
                   <p className="label-eyebrow mb-2 px-2">Deadlines</p>
@@ -133,7 +133,7 @@ export function AnalyticsPanel() {
 
           {/* Empty upcoming — keep it actionable rather than blank */}
           {!hasUpcoming && (
-            <div className="flex items-center justify-between gap-3 border-t border-[var(--border-subtle)] px-[var(--panel-pad)] py-4">
+            <div className="flex items-center justify-between gap-3 border-t border-[var(--border-subtle)] px-[var(--panel-pad)] py-[var(--space-lg)]">
               <span className="text-base text-[var(--text-tertiary)]">Nothing scheduled soon.</span>
               <button
                 onClick={() => openEvent({ event: null })}

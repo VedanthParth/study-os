@@ -23,10 +23,12 @@ interface CalendarViewProps {
   onDatesSet: (title: string) => void
   initialView?: FCView
   className?: string
+  /** Fill the parent's height (cells shrink to fit) instead of growing to content. */
+  fill?: boolean
 }
 
 export const CalendarView = forwardRef<CalendarHandle, CalendarViewProps>(
-  ({ events, onEventClick, onDateSelect, onDatesSet, initialView, className }, ref) => {
+  ({ events, onEventClick, onDateSelect, onDatesSet, initialView, className, fill }, ref) => {
     const calendarRef = useRef<FullCalendar>(null)
 
     useImperativeHandle(ref, () => ({
@@ -38,14 +40,20 @@ export const CalendarView = forwardRef<CalendarHandle, CalendarViewProps>(
 
     // Pass Date objects (absolute instants) rather than raw naive strings so
     // FullCalendar doesn't re-interpret stored UTC times as local. See parseServerDate.
-    const fcEvents = events.map((e) => ({
-      id: e.id,
-      title: e.title,
-      start: parseServerDate(e.start_time),
-      end: parseServerDate(e.end_time),
-      backgroundColor: EVENT_TYPE_COLORS[e.event_type],
-      borderColor: EVENT_TYPE_COLORS[e.event_type],
-    }))
+    // Soft pills: a light tint of the type colour as the fill, the solid colour
+    // as the text — calmer than saturated bars and readable in both themes.
+    const fcEvents = events.map((e) => {
+      const color = EVENT_TYPE_COLORS[e.event_type]
+      return {
+        id: e.id,
+        title: e.title,
+        start: parseServerDate(e.start_time),
+        end: parseServerDate(e.end_time),
+        backgroundColor: `${color}22`,
+        borderColor: 'transparent',
+        textColor: color,
+      }
+    })
 
     function handleEventClick(arg: EventClickArg) {
       const found = events.find((e) => e.id === arg.event.id)
@@ -69,7 +77,10 @@ export const CalendarView = forwardRef<CalendarHandle, CalendarViewProps>(
           events={fcEvents}
           eventClick={handleEventClick}
           datesSet={handleDatesSet}
-          height="auto"
+          height={fill ? '100%' : 'auto'}
+          eventDisplay="block"
+          dayMaxEvents={3}
+          dayMaxEventRows={3}
           allDaySlot={false}
           slotMinTime="06:00:00"
           nowIndicator

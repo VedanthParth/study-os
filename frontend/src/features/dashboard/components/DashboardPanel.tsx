@@ -26,6 +26,18 @@ interface DashboardPanelProps {
    * panels that manage full-bleed sections internally (e.g. Analytics dividers).
    */
   padded?: boolean
+  /**
+   * Marks this widget as the active focus of attention (e.g. a running study
+   * session). It rises higher and gains a soft accent ring — communicating
+   * importance without shouting.
+   */
+  active?: boolean
+  /**
+   * Fill the available height of the parent column (used by the calendar hero
+   * so the dashboard fits the viewport). The content area then scrolls
+   * internally instead of growing the page.
+   */
+  fill?: boolean
   className?: string
 }
 
@@ -41,20 +53,30 @@ export function DashboardPanel({
   footer,
   children,
   padded = true,
+  active = false,
+  fill = false,
   className,
 }: DashboardPanelProps) {
   const [collapsed, setCollapsed] = useState(false)
 
   return (
     <div
+      style={{ transition: 'transform 250ms var(--ease-soft), box-shadow 250ms var(--ease-soft)' }}
       className={cn(
-        'flex flex-col overflow-hidden rounded-[var(--radius-panel)] border border-[var(--border-subtle)] bg-[var(--surface-card)] shadow-[var(--shadow-sm)]',
+        'flex flex-col overflow-hidden rounded-[var(--radius-panel)] border border-[var(--border-subtle)] bg-[var(--surface-card)]',
+        fill && 'h-full min-h-0',
+        // Depth system: widgets float gently and lift on hover. The active
+        // widget rests higher with an accent ring. Motion is disabled for users
+        // who prefer reduced motion.
+        active
+          ? 'shadow-[var(--shadow-xl)] ring-1 ring-[var(--color-study)] -translate-y-1 motion-reduce:translate-y-0'
+          : 'shadow-[var(--shadow-md)] hover:-translate-y-0.5 hover:shadow-[var(--shadow-lg)] motion-reduce:transform-none motion-reduce:hover:translate-y-0',
         className,
       )}
     >
       {/* PanelHeader — title framed by whitespace, not pinned to the edge */}
-      <div className="flex flex-shrink-0 items-center justify-between gap-4 border-b border-[var(--border-subtle)] px-[var(--panel-pad)] py-[var(--space-lg)]">
-        <div className="flex min-w-0 items-center gap-2.5">
+      <div className="flex flex-shrink-0 items-center justify-between gap-4 border-b border-[var(--border-subtle)] px-[var(--panel-pad)] py-[var(--space-xl)]">
+        <div className="flex min-w-0 items-center gap-3">
           {icon && <span className="flex-shrink-0 text-[var(--text-tertiary)]">{icon}</span>}
           <h2 className="truncate text-[length:var(--text-widget-title)] font-semibold tracking-tight text-[var(--text-primary)]">
             {title}
@@ -72,12 +94,17 @@ export function DashboardPanel({
         </div>
       </div>
 
-      {/* PanelContainer — sizes to content; the dashboard area scrolls as one. */}
-      {!collapsed && <div className={cn(padded && 'p-[var(--panel-pad)]')}>{children}</div>}
+      {/* PanelContainer — fills + scrolls internally in fill mode, otherwise
+          sizes to its content. */}
+      {!collapsed && (
+        <div className={cn(fill && 'min-h-0 flex-1 overflow-y-auto', padded && 'p-[var(--panel-pad)]')}>
+          {children}
+        </div>
+      )}
 
       {/* PanelFooter — summary + continuity link */}
       {!collapsed && footer && (
-        <div className="flex flex-shrink-0 items-center justify-between gap-3 border-t border-[var(--border-subtle)] px-[var(--panel-pad)] py-[var(--space-md)] text-[var(--text-meta)]">
+        <div className="flex flex-shrink-0 items-center justify-between gap-3 border-t border-[var(--border-subtle)] px-[var(--panel-pad)] py-[var(--space-lg)] text-[var(--text-meta)]">
           {footer}
         </div>
       )}

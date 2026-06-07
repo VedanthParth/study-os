@@ -1,4 +1,15 @@
-import { BarChart2, BookOpen, Calendar, Feather, LayoutDashboard, Map, Plus, Settings } from 'lucide-react'
+import {
+  BarChart2,
+  BookOpen,
+  Calendar,
+  Feather,
+  LayoutDashboard,
+  Map,
+  PanelLeft,
+  PanelLeftClose,
+  Plus,
+  Settings,
+} from 'lucide-react'
 import { useState } from 'react'
 import { NavLink } from 'react-router-dom'
 
@@ -18,13 +29,16 @@ const NAV_ITEMS = [
   { label: 'Analytics', icon: BarChart2, to: ROUTES.ANALYTICS },
 ] as const
 
+const COLLAPSE_KEY = 'studyos_sidebar_collapsed'
+
 const rowBase =
   'group relative flex items-center gap-3 rounded-[var(--radius-control)] px-3 text-[var(--text-md)] transition-colors'
 
-function navRowClass(isActive: boolean) {
+function navRowClass(isActive: boolean, collapsed: boolean) {
   return cn(
     rowBase,
     'min-h-[44px]',
+    collapsed && 'justify-center px-0',
     isActive
       ? 'bg-[var(--surface-sunken)] font-medium text-[var(--text-primary)]'
       : 'text-[var(--text-secondary)] hover:bg-[var(--surface-sunken)] hover:text-[var(--text-primary)]',
@@ -50,6 +64,7 @@ interface AppSidebarProps {
 
 export function AppSidebar({ className }: AppSidebarProps) {
   const [manageOpen, setManageOpen] = useState(false)
+  const [collapsed, setCollapsed] = useState(() => localStorage.getItem(COLLAPSE_KEY) === '1')
 
   const currentUser = useUserStore((s) => s.currentUser)
   const workspaces = useWorkspaceStore((s) => s.workspaces)
@@ -59,32 +74,64 @@ export function AppSidebar({ className }: AppSidebarProps) {
   const userName = currentUser?.display_name ?? 'Guest User'
   const userPlan = currentUser?.is_guest === false ? (currentUser.email ?? 'StudyOS') : 'StudyOS Free'
 
+  function toggleCollapsed() {
+    setCollapsed((c) => {
+      const next = !c
+      localStorage.setItem(COLLAPSE_KEY, next ? '1' : '0')
+      return next
+    })
+  }
+
   return (
     <>
       <aside
         className={cn(
-          'flex h-full w-64 flex-shrink-0 flex-col border-r border-[var(--border-subtle)] bg-[var(--surface-card)]',
+          'flex h-full flex-shrink-0 flex-col border-r border-[var(--border-subtle)] bg-[var(--surface-card)] transition-[width] duration-200 ease-[var(--ease-soft)]',
+          collapsed ? 'w-[76px]' : 'w-64',
           className,
         )}
       >
-        {/* Logo lockup — quill mark for the academic, notebook feel */}
-        <div className="flex h-20 items-center gap-2.5 border-b border-[var(--border-subtle)] px-6">
-          <Feather size={22} strokeWidth={1.75} className="text-[var(--color-deadline)]" />
-          <span className="text-xl font-semibold tracking-tight text-[var(--text-primary)]">
-            StudyOS
-          </span>
+        {/* Logo lockup + collapse toggle */}
+        <div
+          className={cn(
+            'flex h-20 flex-shrink-0 items-center border-b border-[var(--border-subtle)]',
+            collapsed ? 'justify-center px-2' : 'gap-2.5 px-6',
+          )}
+        >
+          {!collapsed && (
+            <>
+              <Feather size={22} strokeWidth={1.75} className="flex-shrink-0 text-[var(--color-deadline)]" />
+              <span className="flex-1 truncate text-xl font-semibold tracking-tight text-[var(--text-primary)]">
+                StudyOS
+              </span>
+            </>
+          )}
+          <button
+            onClick={toggleCollapsed}
+            aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+            title={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+            className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-[var(--radius-control)] text-[var(--text-tertiary)] transition-colors hover:bg-[var(--surface-sunken)] hover:text-[var(--text-primary)]"
+          >
+            {collapsed ? <PanelLeft size={20} /> : <PanelLeftClose size={20} />}
+          </button>
         </div>
 
-        <div className="flex flex-1 flex-col gap-6 overflow-y-auto px-3 py-5">
+        <div className={cn('flex flex-1 flex-col gap-6 overflow-y-auto py-5', collapsed ? 'px-3' : 'px-4')}>
           {/* Primary navigation */}
           <nav className="flex flex-col gap-1">
             {NAV_ITEMS.map(({ label, icon: Icon, to }) => (
-              <NavLink key={to} to={to} end={to === ROUTES.HOME} className={({ isActive }) => navRowClass(isActive)}>
+              <NavLink
+                key={to}
+                to={to}
+                end={to === ROUTES.HOME}
+                title={collapsed ? label : undefined}
+                className={({ isActive }) => navRowClass(isActive, collapsed)}
+              >
                 {({ isActive }) => (
                   <>
-                    <ActiveMark show={isActive} />
-                    <Icon size={19} strokeWidth={1.75} />
-                    {label}
+                    <ActiveMark show={isActive && !collapsed} />
+                    <Icon size={19} strokeWidth={1.75} className="flex-shrink-0" />
+                    {!collapsed && label}
                   </>
                 )}
               </NavLink>
@@ -93,19 +140,30 @@ export function AppSidebar({ className }: AppSidebarProps) {
 
           {/* Workspaces — switch directly from the navigator */}
           <div className="flex flex-col gap-1.5">
-            <div className="flex items-center justify-between px-3 pb-2">
-              <span className="label-eyebrow">Workspaces</span>
+            {!collapsed ? (
+              <div className="flex items-center justify-between px-3 pb-2">
+                <span className="label-eyebrow">Workspaces</span>
+                <button
+                  onClick={() => setManageOpen(true)}
+                  aria-label="Manage workspaces"
+                  title="Manage workspaces"
+                  className="flex h-6 w-6 items-center justify-center rounded-md text-[var(--text-tertiary)] transition-colors hover:bg-[var(--surface-sunken)] hover:text-[var(--text-primary)]"
+                >
+                  <Plus size={16} />
+                </button>
+              </div>
+            ) : (
               <button
                 onClick={() => setManageOpen(true)}
                 aria-label="Manage workspaces"
                 title="Manage workspaces"
-                className="flex h-6 w-6 items-center justify-center rounded-md text-[var(--text-tertiary)] transition-colors hover:bg-[var(--surface-sunken)] hover:text-[var(--text-primary)]"
+                className={cn(rowBase, 'min-h-[40px] justify-center px-0 text-[var(--text-tertiary)] hover:bg-[var(--surface-sunken)] hover:text-[var(--text-primary)]')}
               >
-                <Plus size={16} />
+                <Plus size={18} />
               </button>
-            </div>
+            )}
 
-            {workspaces.length === 0 ? (
+            {workspaces.length === 0 && !collapsed ? (
               <button
                 onClick={() => setManageOpen(true)}
                 className={cn(rowBase, 'min-h-[40px] text-[var(--text-tertiary)] hover:bg-[var(--surface-sunken)] hover:text-[var(--text-secondary)]')}
@@ -120,15 +178,14 @@ export function AppSidebar({ className }: AppSidebarProps) {
                   <button
                     key={w.id}
                     onClick={() => setActiveWorkspace(w)}
+                    title={collapsed ? w.name : undefined}
                     className={cn(
                       rowBase,
-                      'min-h-[52px] py-2 text-left',
-                      isActive
-                        ? 'bg-[var(--surface-sunken)]'
-                        : 'hover:bg-[var(--surface-sunken)]',
+                      collapsed ? 'min-h-[44px] justify-center px-0' : 'min-h-[52px] py-2 text-left',
+                      isActive ? 'bg-[var(--surface-sunken)]' : 'hover:bg-[var(--surface-sunken)]',
                     )}
                   >
-                    <ActiveMark show={isActive} />
+                    <ActiveMark show={isActive && !collapsed} />
                     <span
                       aria-hidden="true"
                       className={cn(
@@ -136,19 +193,21 @@ export function AppSidebar({ className }: AppSidebarProps) {
                         isActive ? 'bg-[var(--accent)]' : 'bg-[var(--border-strong)]',
                       )}
                     />
-                    <span className="min-w-0 flex-1">
-                      <span
-                        className={cn(
-                          'block truncate text-base font-medium',
-                          isActive ? 'text-[var(--text-primary)]' : 'text-[var(--text-secondary)]',
-                        )}
-                      >
-                        {w.name}
+                    {!collapsed && (
+                      <span className="min-w-0 flex-1">
+                        <span
+                          className={cn(
+                            'block truncate text-base font-medium',
+                            isActive ? 'text-[var(--text-primary)]' : 'text-[var(--text-secondary)]',
+                          )}
+                        >
+                          {w.name}
+                        </span>
+                        <span className="block truncate text-[var(--text-meta)] text-[var(--text-tertiary)]">
+                          {WORKSPACE_TYPE_LABELS[w.type]}
+                        </span>
                       </span>
-                      <span className="block truncate text-[var(--text-meta)] text-[var(--text-tertiary)]">
-                        {WORKSPACE_TYPE_LABELS[w.type]}
-                      </span>
-                    </span>
+                    )}
                   </button>
                 )
               })
@@ -156,26 +215,38 @@ export function AppSidebar({ className }: AppSidebarProps) {
           </div>
         </div>
 
-        {/* Settings + user profile card pinned at the bottom */}
-        <div className="flex flex-col gap-2 border-t border-[var(--border-subtle)] px-3 py-3">
-          <NavLink to={ROUTES.SETTINGS} className={({ isActive }) => navRowClass(isActive)}>
+        {/* Settings + user profile pinned at the bottom */}
+        <div className={cn('flex flex-shrink-0 flex-col gap-2 border-t border-[var(--border-subtle)] py-3', collapsed ? 'px-3' : 'px-4')}>
+          <NavLink
+            to={ROUTES.SETTINGS}
+            title={collapsed ? 'Settings' : undefined}
+            className={({ isActive }) => navRowClass(isActive, collapsed)}
+          >
             {({ isActive }) => (
               <>
-                <ActiveMark show={isActive} />
-                <Settings size={19} strokeWidth={1.75} />
-                Settings
+                <ActiveMark show={isActive && !collapsed} />
+                <Settings size={19} strokeWidth={1.75} className="flex-shrink-0" />
+                {!collapsed && 'Settings'}
               </>
             )}
           </NavLink>
 
-          <div className="flex items-center gap-3 rounded-[var(--radius-control)] px-3 py-2">
+          <div
+            className={cn(
+              'flex items-center rounded-[var(--radius-control)]',
+              collapsed ? 'justify-center px-0 py-1' : 'gap-3 px-3 py-2',
+            )}
+            title={collapsed ? userName : undefined}
+          >
             <UserAvatar name={userName} size={36} />
-            <div className="min-w-0 flex-1">
-              <p className="truncate text-[var(--text-base)] font-medium text-[var(--text-primary)]">
-                {userName}
-              </p>
-              <p className="truncate text-[var(--text-meta)] text-[var(--text-tertiary)]">{userPlan}</p>
-            </div>
+            {!collapsed && (
+              <div className="min-w-0 flex-1">
+                <p className="truncate text-[var(--text-base)] font-medium text-[var(--text-primary)]">
+                  {userName}
+                </p>
+                <p className="truncate text-[var(--text-meta)] text-[var(--text-tertiary)]">{userPlan}</p>
+              </div>
+            )}
           </div>
         </div>
       </aside>

@@ -36,7 +36,6 @@ export function StudyPanel() {
   const resumeSession = useStudyStore((s) => s.resumeSession)
   const stopSession = useStudyStore((s) => s.stopSession)
   const advanceBlock = useStudyStore((s) => s.advanceBlock)
-  const dismissCompletion = useStudyStore((s) => s.dismissCompletion)
 
   const openStudy = useDashboardInteractions((s) => s.openStudy)
   const openTaskEditor = useDashboardInteractions((s) => s.openTaskEditor)
@@ -92,6 +91,7 @@ export function StudyPanel() {
     <DashboardPanel
       title="Study Session"
       icon={<BookOpen size={20} strokeWidth={1.75} />}
+      active={hasActiveSession}
       footer={
         <>
           <PanelFooterSummary>{studySummary}</PanelFooterSummary>
@@ -99,25 +99,9 @@ export function StudyPanel() {
         </>
       }
     >
-      {isCompleted && (
-        <div className="flex flex-col items-center gap-5 text-center">
-          <p className="text-lg font-medium text-[var(--text-primary)]">Session complete!</p>
-          <div className="flex gap-2">
-            <button onClick={() => openStudy({ method: selectedMethod })} className="btn-primary btn-sm">
-              New Session
-            </button>
-            {lastSession && (
-              <button onClick={repeatLast} className="btn-secondary btn-sm">
-                <RotateCcw size={15} />
-                Repeat
-              </button>
-            )}
-            <button onClick={dismissCompletion} className="btn-secondary btn-sm">
-              Dismiss
-            </button>
-          </div>
-        </div>
-      )}
+      {/* Completion is surfaced by the soft <SessionCompleteOverlay/> at the
+          dashboard level (sound + notification + blurred modal), so the panel
+          itself simply returns to its idle "ready to focus" state. */}
 
       {hasActiveSession && currentBlock && (
         <div className="flex flex-col items-center gap-5">
@@ -151,15 +135,18 @@ export function StudyPanel() {
       )}
 
       {!hasActiveSession && !isCompleted && (
-        <div className="flex flex-col gap-5">
+        <div className="flex flex-col gap-7">
           {lastSession && (
             <button onClick={repeatLast} className="btn-secondary self-start">
               <RotateCcw size={17} />
               Repeat {METHOD_LABELS[lastSession.method]}
             </button>
           )}
-          <MethodSelector selected={selectedMethod} onSelect={setSelectedMethod} />
-          <button onClick={() => openStudy({ method: selectedMethod })} className="btn-primary self-start">
+          <div className="flex flex-col gap-3.5">
+            <p className="label-eyebrow">Choose your focus</p>
+            <MethodSelector selected={selectedMethod} onSelect={setSelectedMethod} />
+          </div>
+          <button onClick={() => openStudy({ method: selectedMethod })} className="btn-primary w-full">
             Configure &amp; Start
           </button>
         </div>

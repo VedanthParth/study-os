@@ -24,7 +24,9 @@
   --radius-full: 9999px;
 
   /* Panel / card / modal corner — "well-crafted notebook", not soft SaaS. */
-  --radius-panel: 12px;
+  --radius-panel: 12px;   /* panels / cards            */
+  --radius-chip:  8px;    /* chips / small pills       */
+  --radius-modal: 16px;   /* dialogs — softer than panels, the topmost layer */
 
   /* ── Typography Scale ───────────────────────────────────────────────────── */
   --text-xs: 11px;
@@ -78,70 +80,79 @@
   /* ── Spacing Rhythm (V3, responsive) ────────────────────────────────────── */
   /* Panel padding never drops below the 24px card corner radius, so titles and */
   /* content always clear the rounded corners.                                  */
-  --page-margin:  clamp(20px, 1rem + 1.6vw, 48px);
-  --panel-pad:    clamp(24px, 1rem + 1vw, 32px);
-  --section-gap:  clamp(20px, 1rem + 1vw, 32px);
+  --page-margin:  clamp(24px, 1rem + 1.8vw, 52px);
+  --panel-pad:    clamp(32px, 1.75rem + 1.4vw, 48px);   /* generous breathing room inside every widget */
+  --section-gap:  clamp(28px, 1.5rem + 1vw, 40px);
 
-  /* ── Classic Paper Palette ──────────────────────────────────────────────── */
-  /* Warm ivory tones — each step adds a touch of amber warmth.              */
-  /* These replace the neutral gray scale for a calm desk/paper aesthetic.   */
-  --gray-0:   #ffffff;    /* pure white — for high-contrast text/borders */
-  --gray-50:  #f7f4ee;    /* warm ivory — page background (the desk)     */
-  --gray-100: #eeebe3;    /* warm light — sunken/inset surfaces           */
-  --gray-150: #e7e3db;    /* warm — light separator                       */
-  --gray-200: #dedad0;    /* warm subtle border                           */
-  --gray-300: #c8c4b9;    /* warm medium border                           */
-  --gray-400: #98928a;    /* warm muted — icons, placeholder text         */
-  --gray-500: #6c6760;    /* warm medium — secondary labels               */
-  --gray-600: #524d47;    /* warm charcoal — secondary body text          */
-  --gray-700: #3d3830;    /* warm dark — active states, strong borders    */
-  --gray-800: #27221d;    /* warm near-black                              */
-  --gray-900: #1e1a16;    /* warm ink — primary text, primary buttons     */
-  --gray-950: #100e0b;    /* deep ink                                     */
+  /* ── Warm Sand & Clay Surface Scale (V4 — soft, cozy, Headspace-warm) ───── */
+  /* Gently tinted sand tones (clearly NOT white) with clay as the accent.     */
+  /* Low-contrast and calm; each step is a layer in the depth system.          */
+  --gray-0:   #ffffff;    /* pure white — rarely used                   */
+  --gray-50:  #f1ebe1;    /* soft sand — page background (the workspace) */
+  --gray-100: #e7e0d3;    /* sunken / inset surfaces                     */
+  --gray-150: #ded6c7;    /* light separator                            */
+  --gray-200: #d3cabb;    /* subtle border                              */
+  --gray-300: #c0b6a4;    /* medium border                              */
+  --gray-400: #9a8f7e;    /* muted — icons, placeholder text            */
+  --gray-500: #7c7060;    /* medium — secondary labels                  */
+  --gray-600: #6f675c;    /* secondary body text                        */
+  --gray-700: #4f483e;    /* active states, strong borders              */
+  --gray-800: #38322b;    /* warm ink — primary text                    */
+  --gray-900: #2e2922;    /* deep espresso — primary buttons            */
+  --gray-950: #221d17;    /* deepest ink                                */
 
   /* ── Semantic Accent Colors ─────────────────────────────────────────────── */
-  /* Muted, ink-on-paper feel — used sparingly as accent marks.              */
-  --color-study: #4a78a8;       /* calm blue-ink — study sessions           */
-  --color-study-muted: #e6edf5;
+  /* Muted, warm-leaning marks used sparingly. Clay is the interactive accent. */
+  --color-study: #5f86ad;       /* dusty blue — study sessions              */
+  --color-study-muted: #e6e9ef;
 
-  --color-exam: #b84e56;        /* deep rose-ink — high-stakes events       */
-  --color-exam-muted: #f8e8e9;
+  --color-exam: #bd5a52;        /* warm brick — high-stakes events          */
+  --color-exam-muted: #f3e2dc;
 
-  --color-deadline: #a87038;    /* amber-ink — deadlines / brass            */
-  --color-deadline-muted: #f5ead9;
+  --color-deadline: #c08a3e;    /* amber — deadlines                        */
+  --color-deadline-muted: #f2e6d2;
 
-  --color-planner: #5e7499;     /* slate-ink — planning / scheduling        */
-  --color-planner-muted: #e8edf5;
+  --color-planner: #7d7a9e;     /* dusty plum — planning / scheduling       */
+  --color-planner-muted: #ebe7ef;
 
-  --color-success: #47856a;     /* sage-ink — completion states             */
-  --color-success-muted: #e4f1ec;
+  --color-success: #6b8e6a;     /* sage — completion states                 */
+  --color-success-muted: #e6ecdf;
 
   --color-muted: var(--gray-400);
 
-  /* ── Surfaces ───────────────────────────────────────────────────────────── */
-  /* paper-on-desk: the page surface is the desk (warm ivory),               */
-  /* cards are sheets of paper (marginally lighter/creamier).                */
-  --surface-page:   var(--gray-50);    /* warm ivory desk  */
-  --surface-card:   #fdfcf7;           /* warm paper sheet */
-  --surface-raised: #fdfcf7;
-  --surface-sunken: var(--gray-100);   /* recessed area    */
+  /* Clay — the warm interactive accent (focus ring, today, active marks). */
+  --color-clay: #c47a55;
+  --color-clay-muted: #f0e2d8;
 
-  /* ── Borders ────────────────────────────────────────────────────────────── */
-  --border-subtle:  var(--gray-200);   /* nearly invisible — panel edges  */
-  --border-default: var(--gray-300);   /* clear, not harsh                */
-  --border-strong:  var(--gray-400);   /* emphasis, active states         */
+  /* ── Surfaces (Depth System) ────────────────────────────────────────────── */
+  /* page (workspace) → card (widget) → raised (interactive) → sunken (inset). */
+  /* Each layer steps in warmth/prominence so the UI feels gently layered.      */
+  --surface-page:   #f1ebe1;           /* soft sand workspace  */
+  --surface-card:   #faf6ef;           /* warm cream widget    */
+  --surface-raised: #fffdf8;           /* lifted / hover       */
+  --surface-sunken: #e9e1d4;           /* recessed area        */
+
+  /* ── Borders (soft, warm, low-contrast — depth from elevation, not lines) ── */
+  --border-subtle:  rgba(56, 40, 24, 0.08);
+  --border-default: rgba(56, 40, 24, 0.13);
+  --border-strong:  rgba(56, 40, 24, 0.20);
 
   /* ── Text ───────────────────────────────────────────────────────────────── */
-  --text-primary:   var(--gray-900);   /* warm ink — main body text       */
-  --text-secondary: var(--gray-600);   /* warm charcoal — supporting text */
-  --text-tertiary:  var(--gray-400);   /* warm graphite — metadata/labels */
-  --text-inverse:   #fdfcf7;           /* warm white on dark backgrounds  */
+  --text-primary:   #38322b;           /* warm ink — main body text */
+  --text-secondary: #6f675c;           /* supporting text           */
+  --text-tertiary:  #9a8f7e;           /* metadata / labels         */
+  --text-inverse:   #faf6ef;           /* text on dark fills        */
 
-  /* ── Shadows ────────────────────────────────────────────────────────────── */
-  /* Warm-tinted shadows evoke natural light on paper.                       */
-  --shadow-sm: 0 1px 3px rgba(110, 80, 50, 0.07);
-  --shadow-md: 0 2px 8px rgba(110, 80, 50, 0.09);
-  --shadow-lg: 0 4px 20px rgba(110, 80, 50, 0.11);
+  /* ── Elevation / Shadow System (V4) ─────────────────────────────────────── */
+  /* Soft, warm-tinted layered shadows — surfaces float gently above the sand   */
+  /* page. sm = resting, md = default widget, lg = hover, xl = active.          */
+  --shadow-sm: 0 1px 2px rgba(78, 52, 28, 0.05);
+  --shadow-md: 0 1px 3px rgba(78, 52, 28, 0.05), 0 6px 20px rgba(78, 52, 28, 0.06);
+  --shadow-lg: 0 12px 32px rgba(78, 52, 28, 0.10);
+  --shadow-xl: 0 16px 40px rgba(78, 52, 28, 0.14);
+
+  /* Easing shared by elevation lifts and widget transitions */
+  --ease-soft: cubic-bezier(0.2, 0.8, 0.2, 1);
 
   /* ── Semantic Interactive Tokens ────────────────────────────────────────── */
   /* These invert in dark mode — components should reference these instead of */
@@ -150,73 +161,77 @@
   --button-primary-bg-hover:  var(--gray-700);
   --button-primary-text:      var(--text-inverse);
 
-  --accent:        var(--color-study);
-  --accent-muted:  var(--color-study-muted);
+  --accent:        var(--color-clay);
+  --accent-muted:  var(--color-clay-muted);
 
-  /* Modal scrim — warm ink, never pure black */
-  --overlay: rgba(30, 26, 22, 0.35);
+  /* Modal scrim — warm ink */
+  --overlay: rgba(40, 28, 18, 0.40);
 
   /* Theme-agnostic alias for the focus/active accent bar */
-  --focus-ring: var(--color-study);
+  --focus-ring: var(--color-clay);
 }
 
-/* ── Library After Dark (Dark Mode) ───────────────────────────────────────── */
-/* Late-night studying in a library: warm charcoal desk, leather panels,      */
-/* parchment ink, brass highlights. No pure black, no pure white.             */
+/* ── Dark Mode (V4 — warm charcoal Sand & Clay, no pure black) ─────────────── */
+/* Cozy late-night surfaces: warm espresso page, layered cocoa panels, sand     */
+/* parchment text, a glowing clay accent. Depth comes from elevation.           */
 [data-theme='dark'] {
-  /* Warm charcoal scale (inverted intent of the paper scale) */
-  --gray-0:   #14110e;    /* deepest — backdrop wells              */
-  --gray-50:  #1a1714;    /* warm charcoal — page (the dark desk)  */
-  --gray-100: #211d19;    /* leather panel base                    */
-  --gray-150: #272320;    /* raised surface                        */
-  --gray-200: #322c27;    /* subtle border                         */
-  --gray-300: #423a33;    /* medium border                         */
-  --gray-400: #6b6157;    /* muted — icons, placeholder            */
-  --gray-500: #908579;    /* secondary labels                      */
+  /* Warm charcoal scale (inverted intent of the sand scale) */
+  --gray-0:   #161310;    /* deepest — backdrop wells              */
+  --gray-50:  #211d18;    /* warm espresso — page (dark workspace) */
+  --gray-100: #2a251f;    /* panel base                            */
+  --gray-150: #322c25;    /* raised surface                        */
+  --gray-200: #3b342c;    /* subtle border                         */
+  --gray-300: #4d4438;    /* medium border                         */
+  --gray-400: #6f6454;    /* muted — icons, placeholder            */
+  --gray-500: #8f8472;    /* secondary labels                      */
   --gray-600: #b3a795;    /* secondary body text                   */
-  --gray-700: #cbbfac;    /* strong text                           */
+  --gray-700: #ccc0ad;    /* strong text                           */
   --gray-800: #ddd2bf;    /* near-parchment                        */
-  --gray-900: #e9ddc8;    /* parchment — primary text              */
-  --gray-950: #f3e9d6;    /* brightest parchment                   */
+  --gray-900: #ece3d5;    /* sand parchment — primary text         */
+  --gray-950: #f5eee0;    /* brightest parchment                   */
 
-  /* Accents — slightly lifted for contrast on dark leather */
-  --color-study: #7aa6cf;       --color-study-muted: #232c34;
-  --color-exam: #d4848b;        --color-exam-muted: #36262a;
-  --color-deadline: #c79a5e;    --color-deadline-muted: #352b1d;  /* brass */
-  --color-planner: #8ea2c4;     --color-planner-muted: #262d38;
-  --color-success: #7bae93;     --color-success-muted: #1f2c26;
+  /* Accents — lifted for contrast on warm charcoal */
+  --color-study: #7da3c4;       --color-study-muted: #262d34;
+  --color-exam: #d4847c;        --color-exam-muted: #352724;
+  --color-deadline: #cd9b5d;    --color-deadline-muted: #352a1b;
+  --color-planner: #9b97bd;     --color-planner-muted: #2a2733;
+  --color-success: #8aab85;     --color-success-muted: #232c20;
   --color-muted: var(--gray-400);
 
-  /* Surfaces — desk is charcoal, panels are leather (a touch lighter) */
-  --surface-page:   var(--gray-50);
-  --surface-card:   #211d19;
-  --surface-raised: #272320;
-  --surface-sunken: #1e1a16;
+  --color-clay: #d8916b;
+  --color-clay-muted: #3a2b20;
 
-  /* Borders */
-  --border-subtle:  var(--gray-200);
-  --border-default: var(--gray-300);
-  --border-strong:  var(--gray-400);
+  /* Surfaces — page is espresso, panels step lighter as they rise */
+  --surface-page:   #211d18;
+  --surface-card:   #2a251f;
+  --surface-raised: #322c25;
+  --surface-sunken: #1b1813;
+
+  /* Borders — faint warm hairlines; depth carries separation */
+  --border-subtle:  rgba(255, 244, 230, 0.07);
+  --border-default: rgba(255, 244, 230, 0.12);
+  --border-strong:  rgba(255, 244, 230, 0.18);
 
   /* Text */
-  --text-primary:   var(--gray-900);
-  --text-secondary: var(--gray-600);
-  --text-tertiary:  var(--gray-500);
-  --text-inverse:   #1a1714;   /* charcoal on parchment buttons */
+  --text-primary:   #ece3d5;
+  --text-secondary: #b3a795;
+  --text-tertiary:  #8f8472;
+  --text-inverse:   #211d18;   /* espresso on parchment buttons */
 
-  /* Shadows — deeper, cooler ambient for night */
-  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.35);
-  --shadow-md: 0 2px 10px rgba(0, 0, 0, 0.45);
-  --shadow-lg: 0 6px 28px rgba(0, 0, 0, 0.55);
+  /* Shadows — deeper warm ambient for night; same sm→xl elevation ramp */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.35);
+  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.34);
+  --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.48);
+  --shadow-xl: 0 16px 40px rgba(0, 0, 0, 0.60);
 
-  /* Interactive — parchment-on-charcoal primary button */
+  /* Interactive — parchment-on-espresso primary button */
   --button-primary-bg:        var(--gray-900);
   --button-primary-bg-hover:  var(--gray-700);
   --button-primary-text:      var(--text-inverse);
 
-  --accent:        var(--color-study);
-  --accent-muted:  var(--color-study-muted);
+  --accent:        var(--color-clay);
+  --accent-muted:  var(--color-clay-muted);
 
-  --overlay: rgba(0, 0, 0, 0.6);
-  --focus-ring: var(--color-study);
+  --overlay: rgba(0, 0, 0, 0.62);
+  --focus-ring: var(--color-clay);
 }

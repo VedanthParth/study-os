@@ -1,8 +1,10 @@
 /* ── Typography Foundation ───────────────────────────────────────────────── */
 /* Clean system sans-serif — readable for extended study sessions.          */
 :root {
+  /* Plus Jakarta Sans — a soft, humanist geometric sans (loaded in index.html).
+     Warmer and rounder than the system UI font, for a calmer, premium feel. */
   --font-sans:
-    'Inter', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+    'Plus Jakarta Sans', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
     'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   --font-mono:
     ui-monospace, 'Cascadia Code', 'Fira Code', Consolas,
@@ -47,8 +49,8 @@ h1, h2, h3, h4, h5, h6 {
   color: var(--text-primary);
 }
 
-h1 { font-size: var(--text-page-title); letter-spacing: -0.02em; }
-h2 { font-size: var(--text-widget-title); letter-spacing: -0.015em; }
+h1 { font-size: var(--text-page-title); letter-spacing: -0.03em; }
+h2 { font-size: var(--text-widget-title); letter-spacing: -0.02em; }
 h3 { font-size: var(--text-2xl); }
 h4 { font-size: var(--text-xl); }
 h5 { font-size: var(--text-lg); }
@@ -126,10 +128,11 @@ code, pre {
     font-weight: var(--font-medium);
     color: var(--button-primary-text);
     background-color: var(--button-primary-bg);
-    transition: background-color 0.15s ease, opacity 0.15s ease;
+    transition: background-color 0.15s ease, opacity 0.15s ease, transform 0.15s ease;
   }
-  .btn-primary:hover { background-color: var(--button-primary-bg-hover); }
-  .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+  .btn-primary:hover { background-color: var(--button-primary-bg-hover); transform: scale(1.02); }
+  .btn-primary:active { transform: scale(0.98); }
+  .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
 
   /* Secondary (outline) button */
   .btn-secondary {
@@ -145,42 +148,122 @@ code, pre {
     color: var(--text-secondary);
     background-color: transparent;
     border: 1px solid var(--border-default);
-    transition: color 0.15s ease, border-color 0.15s ease, background-color 0.15s ease;
+    transition: color 0.15s ease, border-color 0.15s ease, background-color 0.15s ease,
+      transform 0.15s ease;
   }
   .btn-secondary:hover {
     color: var(--text-primary);
     border-color: var(--border-strong);
     background-color: var(--surface-sunken);
+    transform: scale(1.02);
   }
+  .btn-secondary:active { transform: scale(0.98); }
 
   /* Compact variant of either button (toolbars, inline actions) */
   .btn-sm { min-height: var(--control-h-sm); font-size: var(--text-base); padding-inline: 12px; }
 
-  /* FullCalendar — bind its CSS variables to our tokens so the grid adapts to
-     both Paper & Ink and Library After Dark without hardcoded light colors. */
+  /* FullCalendar — bind its CSS variables to our tokens, then refine the grid
+     into soft pills, a quiet weekday row, and an accented "today" so it reads
+     like a calm planner rather than a default data grid. */
   .fc {
     --fc-border-color: var(--border-subtle);
-    --fc-page-bg-color: var(--surface-card);
+    --fc-page-bg-color: transparent;
     --fc-neutral-bg-color: var(--surface-sunken);
-    --fc-today-bg-color: var(--accent-muted);
+    --fc-today-bg-color: transparent;
     --fc-now-indicator-color: var(--color-exam);
     --fc-highlight-color: var(--accent-muted);
+    --fc-event-border-color: transparent;
     --fc-list-event-hover-bg-color: var(--surface-sunken);
     color: var(--text-primary);
     font-size: var(--text-base);
   }
-  .fc .fc-col-header-cell-cushion,
-  .fc .fc-daygrid-day-number,
+
+  /* Weekday header — quiet small-caps labels, not bold links */
+  .fc .fc-col-header-cell {
+    padding: 6px 0 10px;
+    background: transparent;
+  }
+  .fc .fc-col-header-cell-cushion {
+    padding: 2px 4px;
+    font-size: var(--text-meta);
+    font-weight: var(--font-medium);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-label);
+    color: var(--text-tertiary);
+  }
+
+  /* Day cells — gentle hover, comfortable number placement */
+  .fc .fc-daygrid-day-frame { padding: 2px; }
+  .fc .fc-daygrid-day { transition: background-color 0.15s ease; }
+  .fc .fc-daygrid-day:hover {
+    background: color-mix(in srgb, var(--surface-sunken) 55%, transparent);
+  }
+  .fc .fc-daygrid-day-number {
+    padding: 6px 8px;
+    font-size: var(--text-sm);
+    font-weight: var(--font-medium);
+    color: var(--text-secondary);
+  }
+  .fc .fc-day-other .fc-daygrid-day-number { color: var(--text-tertiary); opacity: 0.55; }
+
+  /* Today — a filled accent chip on the date, no heavy cell wash */
+  .fc .fc-day-today { background: transparent !important; }
+  .fc .fc-day-today .fc-daygrid-day-number {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 26px;
+    height: 26px;
+    margin: 4px;
+    padding: 0;
+    border-radius: var(--radius-full);
+    background: var(--accent);
+    color: var(--button-primary-text);
+    font-weight: var(--font-semibold);
+  }
+
+  /* Events — soft rounded pills */
+  .fc .fc-daygrid-event {
+    margin: 1px 6px 2px;
+    padding: 2px 8px;
+    border-radius: var(--radius-chip);
+    font-size: var(--text-sm);
+    font-weight: var(--font-medium);
+    border: none;
+    transition: filter 0.15s ease;
+  }
+  .fc .fc-daygrid-event:hover { filter: brightness(0.95); }
+  .fc .fc-daygrid-dot-event { background: var(--surface-sunken); color: var(--text-secondary); }
+  .fc .fc-daygrid-dot-event:hover { background: var(--surface-raised); }
+  .fc .fc-daygrid-event-dot { border-width: 4px; }
+  .fc .fc-event { cursor: pointer; }
+  .fc .fc-daygrid-more-link {
+    font-size: var(--text-meta);
+    font-weight: var(--font-medium);
+    color: var(--text-tertiary);
+    padding: 0 6px;
+  }
+
+  /* timeGrid (week view) */
+  .fc .fc-timegrid-slot { height: 2.6em; }
   .fc .fc-timegrid-slot-label-cushion,
   .fc .fc-timegrid-axis-cushion {
     color: var(--text-tertiary);
+    font-size: var(--text-meta);
+  }
+  .fc .fc-timegrid-event {
+    border-radius: var(--radius-chip);
+    border: none;
+    padding: 2px 6px;
+    font-weight: var(--font-medium);
+    box-shadow: var(--shadow-sm);
   }
 
   /* Text input / select base */
   .input {
     width: 100%;
     min-height: var(--control-h);
-    padding-inline: var(--control-px);
+    padding: 14px 18px;
     border-radius: var(--radius-control);
     font-size: var(--text-md);
     color: var(--text-primary);
@@ -190,4 +273,20 @@ code, pre {
   }
   .input::placeholder { color: var(--text-tertiary); }
   .input:focus { outline: none; border-color: var(--border-strong); }
+}
+
+/* ── Reduced motion ──────────────────────────────────────────────────────── */
+/* Honour the OS preference: disable the lift/scale micro-interactions so the */
+/* interface stays calm and still for users who ask for it.                   */
+@media (prefers-reduced-motion: reduce) {
+  .btn-primary,
+  .btn-secondary {
+    transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+  }
+  .btn-primary:hover,
+  .btn-primary:active,
+  .btn-secondary:hover,
+  .btn-secondary:active {
+    transform: none;
+  }
 }

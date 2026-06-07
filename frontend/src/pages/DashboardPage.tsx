@@ -1,4 +1,4 @@
-import { LayoutDashboard } from 'lucide-react'
+import { Focus, LayoutDashboard, X } from 'lucide-react'
 import { useEffect, useState } from 'react'
 
 import { EmptyState } from '@/components/ui/EmptyState'
@@ -11,6 +11,7 @@ import { useCalendarStore } from '@/features/calendar/store'
 import { CalendarPanel } from '@/features/dashboard/components/CalendarPanel'
 import { DashboardGreeting } from '@/features/dashboard/components/DashboardGreeting'
 import { DashboardInteractions } from '@/features/dashboard/components/DashboardInteractions'
+import { SessionCompleteOverlay } from '@/features/dashboard/components/SessionCompleteOverlay'
 import { StudyPanel } from '@/features/dashboard/components/StudyPanel'
 import { TaskPanel } from '@/features/dashboard/components/TaskPanel'
 import { WorkspacePanel } from '@/features/dashboard/components/WorkspacePanel'
@@ -35,26 +36,6 @@ const WIDGET_ELEMENTS: Record<WidgetKey, React.ReactElement> = {
 
 // ── Layout renderer ───────────────────────────────────────────────────────
 
-interface ColumnProps {
-  columnWidgets: WidgetKey[]
-  visible: WidgetKey[]
-  gap: string
-}
-
-function PanelColumn({ columnWidgets, visible, gap }: ColumnProps) {
-  const active = columnWidgets.filter((k) => visible.includes(k))
-  if (active.length === 0) return null
-  // Panels size to their content (no flex-1 fill) so the dashboard reads as one
-  // cohesive surface rather than widgets stretched into tall containers.
-  return (
-    <div className="flex flex-col" style={{ gap }}>
-      {active.map((k) => (
-        <div key={k}>{WIDGET_ELEMENTS[k]}</div>
-      ))}
-    </div>
-  )
-}
-
 function renderLayout(layout: LayoutType, visible: WidgetKey[], gap: string) {
   const def = LAYOUT_DEFINITIONS[layout]
 
@@ -68,19 +49,42 @@ function renderLayout(layout: LayoutType, visible: WidgetKey[], gap: string) {
 
   const hasLeft  = leftActive.length > 0
   const hasRight = rightActive.length > 0
-  // Importance weighting: the primary column (Tasks + Calendar) gets ~2/3 of the
-  // width, the supporting column (Study + Analytics) ~1/3. minmax(0,…) lets long
-  // content truncate instead of forcing the column wider.
+  // The hero column (Calendar) gets ~2/3 of the width and fills the height; the
+  // supporting column (~1/3) holds the compact widgets. minmax(0,…) lets content
+  // truncate instead of forcing a column wider.
   const colTemplate = hasLeft && hasRight ? 'minmax(0, 2fr) minmax(0, 1fr)' : 'minmax(0, 1fr)'
 
   return (
     <div style={{ display: 'grid', gridTemplateColumns: colTemplate, gap, alignItems: 'start' }}>
       {hasLeft && (
-        <PanelColumn columnWidgets={leftActive} visible={visible} gap={gap} />
+        <div className="flex flex-col" style={{ gap }}>
+          {leftActive.map((k) => (
+            <div key={k}>{WIDGET_ELEMENTS[k]}</div>
+          ))}
+        </div>
       )}
       {hasRight && (
-        <PanelColumn columnWidgets={rightActive} visible={visible} gap={gap} />
+        <div className="flex flex-col" style={{ gap }}>
+          {rightActive.map((k) => (
+            <div key={k}>{WIDGET_ELEMENTS[k]}</div>
+          ))}
+        </div>
       )}
+    </div>
+  )
+}
+
+/**
+ * Focus Mode layout — the timer takes the stage, tasks stay within reach, and
+ * everything else steps aside. This is a transient presentational override: it
+ * never mutates the saved workspace view, so exiting restores exactly what the
+ * user had configured.
+ */
+function renderFocus(gap: string) {
+  return (
+    <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 2fr) minmax(0, 1fr)', gap, alignItems: 'start' }}>
+      <div>{WIDGET_ELEMENTS.study}</div>
+      <div>{WIDGET_ELEMENTS.tasks}</div>
     </div>
   )
 }
@@ -89,6 +93,10 @@ function renderLayout(layout: LayoutType, visible: WidgetKey[], gap: string) {
 
 export function DashboardPage() {
   const [manageOpen, setManageOpen] = useState(false)
+  // Focus Mode is a transient view override (never persisted to the workspace).
+  // Studying auto-enters it; exiting records the session id so we don't re-enter
+  // for that same session — a new session starts fresh in focus again.
+  const [exitedFocusSessionId, setExitedFocusSessionId] = useState<string | null>(null)
 
   const currentUser = useUserStore((s) => s.currentUser)
   const activeWorkspace = useWorkspaceStore((s) => s.activeWorkspace)
@@ -102,6 +110,9 @@ export function DashboardPage() {
 
   const restoreSession = useStudyStore((s) => s.restoreSession)
   const loadHistory = useStudyStore((s) => s.loadHistory)
+  const activeSession = useStudyStore((s) => s.activeSession)
+  const timerStatus = useStudyStore((s) => s.timer.status)
+  const hasActiveSession = activeSession !== null && (timerStatus === 'running' || timerStatus === 'paused')
 
   const fetchOverview = useAnalyticsStore((s) => s.fetchOverview)
   const clearOverview = useAnalyticsStore((s) => s.clearOverview)
@@ -147,6 +158,13 @@ export function DashboardPage() {
     }
   }, [activeWorkspaceId, fetchView, fetchTasks, fetchEvents, fetchOverview, restoreSession, loadHistory, clearTasks, clearEvents, clearOverview])
 
+  // Studying auto-enters Focus Mode. Deriving it (rather than syncing state in
+  // an effect) means it turns on the moment a session starts and collapses on
+  // its own when the session ends — keyed to the session id so an explicit exit
+  // only suppresses focus for that one session.
+  const activeSessionId = activeSession?.id ?? null
+  const inFocus = hasActiveSession && exitedFocusSessionId !== activeSessionId
+
   return (
     <div className="flex h-full flex-col overflow-hidden bg-[var(--surface-page)]">
       {/* Top strip: workspace switcher + account */}
@@ -162,14 +180,30 @@ export function DashboardPage() {
       <div className="flex flex-shrink-0 flex-wrap items-end justify-between gap-4 px-[var(--page-margin)] pb-2 pt-[var(--page-margin)]">
         <DashboardGreeting />
         {activeWorkspaceId && (
-          <WorkspaceViewControls
-            layoutType={view.layout_type}
-            visibleWidgets={view.visible_widgets}
-            density={view.widget_density}
-            onLayoutChange={(l) => setLayout(activeWorkspaceId, l)}
-            onWidgetToggle={(w) => toggleWidget(activeWorkspaceId, w)}
-            onDensityChange={(d) => setDensity(activeWorkspaceId, d)}
-          />
+          <div className="flex items-center gap-2">
+            {/* Focus Mode — entered automatically while a session is live; the
+                user can step out (and back in) without affecting their layout. */}
+            {hasActiveSession && (
+              <button
+                onClick={() => setExitedFocusSessionId(inFocus ? activeSessionId : null)}
+                className="btn-secondary btn-sm"
+                title={inFocus ? 'Leave focus mode' : 'Return to focus mode'}
+              >
+                {inFocus ? <X size={15} /> : <Focus size={15} />}
+                {inFocus ? 'Exit Focus' : 'Enter Focus'}
+              </button>
+            )}
+            {!inFocus && (
+              <WorkspaceViewControls
+                layoutType={view.layout_type}
+                visibleWidgets={view.visible_widgets}
+                density={view.widget_density}
+                onLayoutChange={(l) => setLayout(activeWorkspaceId, l)}
+                onWidgetToggle={(w) => toggleWidget(activeWorkspaceId, w)}
+                onDensityChange={(d) => setDensity(activeWorkspaceId, d)}
+              />
+            )}
+          </div>
         )}
       </div>
 
@@ -192,8 +226,10 @@ export function DashboardPage() {
           <LoadingState label="Loading workspace…" />
         </div>
       ) : (
-        <div className="flex-1 overflow-y-auto" style={{ padding: densityDef.padding }}>
-          {renderLayout(view.layout_type, view.visible_widgets, densityDef.gap)}
+        <div className="min-h-0 flex-1 overflow-y-auto overflow-x-hidden px-[var(--page-margin)] pb-[var(--page-margin)] pt-[var(--space-lg)]">
+          {inFocus
+            ? renderFocus(densityDef.gap)
+            : renderLayout(view.layout_type, view.visible_widgets, densityDef.gap)}
         </div>
       )}
 
@@ -201,6 +237,9 @@ export function DashboardPage() {
 
       {/* Shared modals for cross-widget quick actions (task / event / study). */}
       <DashboardInteractions />
+
+      {/* Soft completion experience — chime, notification, blurred celebration. */}
+      <SessionCompleteOverlay />
     </div>
   )
 }

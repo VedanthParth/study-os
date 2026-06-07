@@ -13,7 +13,7 @@ export function SessionControls({ status, onPause, onResume, onStop }: SessionCo
   return (
     <div className="flex items-center justify-center gap-3">
       {status === 'running' && (
-        <button onClick={onPause} className="btn-secondary">
+        <button onClick={onPause} className="btn-primary">
           <Pause size={17} />
           Pause
         </button>

@@ -93,10 +93,10 @@ export function SessionConfigModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-      <div className="absolute inset-0 bg-[var(--overlay)]" onClick={onClose} aria-hidden="true" />
+      <div className="absolute inset-0 bg-[var(--overlay)] backdrop-blur-[2px]" onClick={onClose} aria-hidden="true" />
 
-      <div className="relative z-10 w-full max-w-lg rounded-[var(--radius-panel)] border border-[var(--border-subtle)] bg-[var(--surface-card)] shadow-[var(--shadow-lg)]">
-        <div className="flex items-center justify-between border-b border-[var(--border-subtle)] px-7 py-5">
+      <div className="relative z-10 w-full max-w-lg rounded-[var(--radius-modal)] border border-[var(--border-subtle)] bg-[var(--surface-card)] shadow-[var(--shadow-xl)]">
+        <div className="flex items-center justify-between border-b border-[var(--border-subtle)] px-9 py-7">
           <h2 className="text-2xl font-semibold tracking-tight text-[var(--text-primary)]">
             {METHOD_LABELS[method]}
           </h2>
@@ -105,7 +105,7 @@ export function SessionConfigModal({
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="flex flex-col gap-5 px-7 py-6">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-6 px-9 py-8">
           {/* Block list */}
           <div>
             <p className="mb-2 text-xs font-medium text-[var(--text-secondary)]">

@@ -30,7 +30,10 @@ export function AppLayout() {
   return (
     <div className="flex h-screen overflow-hidden bg-[var(--surface-page)]">
       <AppSidebar />
-      <div className="flex flex-1 flex-col overflow-hidden">
+      {/* min-w-0 is essential: without it this flex child adopts its content's
+          intrinsic min-width (the calendar grid), growing wider than the
+          viewport so the parent's overflow-hidden clips the right-hand column. */}
+      <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
         <Outlet />
       </div>
     </div>
