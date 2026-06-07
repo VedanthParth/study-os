@@ -62,25 +62,27 @@ export function TaskCard({
     })
   }
 
-  const dueDateLabel = task.due_date
-    ? new Date(task.due_date + 'T00:00:00').toLocaleDateString(undefined, {
-        month: 'short',
-        day: 'numeric',
-      })
+  const dueDate = task.due_date ? new Date(task.due_date + 'T00:00:00') : null
+  const dueDateLabel = dueDate
+    ? dueDate.toLocaleDateString(undefined, { month: 'short', day: 'numeric' })
     : null
+  const startOfToday = new Date()
+  startOfToday.setHours(0, 0, 0, 0)
+  const isOverdue = !!dueDate && !task.completed && dueDate < startOfToday
 
   return (
     <div
       className={cn(
-        'group flex items-start gap-2.5 rounded-[var(--radius-lg)] border bg-[var(--surface-card)] px-3.5 py-3 transition-colors',
+        'group flex items-start gap-2 rounded-[var(--radius-md)] border px-2.5 py-2 transition-colors',
         isDragging
           ? 'border-[var(--border-default)] opacity-60 shadow-[var(--shadow-md)]'
-          : 'border-[var(--border-subtle)]',
+          : 'border-[var(--border-subtle)] bg-[var(--surface-card)] hover:border-[var(--border-default)]',
+        task.completed && !isDragging && 'opacity-60',
       )}
     >
       {/* Drag handle */}
       <div className="mt-0.5 cursor-grab text-[var(--text-tertiary)] opacity-0 transition-opacity group-hover:opacity-100 active:cursor-grabbing">
-        <GripVertical size={14} />
+        <GripVertical size={13} />
       </div>
 
       {/* Complete checkbox */}
@@ -98,7 +100,7 @@ export function TaskCard({
         {task.completed && <Check size={10} className="text-[var(--text-inverse)]" />}
       </button>
 
-      {/* Title + description + due date */}
+      {/* Title (+ optional description) */}
       <div className="min-w-0 flex-1">
         <p
           className={cn(
@@ -108,23 +110,33 @@ export function TaskCard({
         >
           {task.title}
         </p>
-        {(task.description || dueDateLabel) && (
-          <div className="mt-0.5 flex items-center gap-3">
-            {task.description && (
-              <p className="truncate text-xs text-[var(--text-tertiary)]">{task.description}</p>
-            )}
-            {dueDateLabel && (
-              <span className="flex-shrink-0 text-xs text-[var(--text-tertiary)]">
-                {dueDateLabel}
-              </span>
-            )}
-          </div>
+        {task.description && (
+          <p className="mt-0.5 truncate text-[var(--text-meta)] text-[var(--text-tertiary)]">
+            {task.description}
+          </p>
         )}
       </div>
 
+      {/* Due date — colour-coded so it is easy to notice (overdue stands out) */}
+      {dueDateLabel && (
+        <span
+          className={cn(
+            'mt-0.5 inline-flex flex-shrink-0 items-center gap-1 rounded-[var(--radius-sm)] px-1.5 py-0.5 text-[11px] font-medium',
+            isOverdue
+              ? 'bg-[var(--color-exam-muted)] text-[var(--color-exam)]'
+              : 'bg-[var(--surface-sunken)] text-[var(--text-secondary)]',
+            task.completed && 'opacity-70',
+          )}
+          title={isOverdue ? 'Overdue' : 'Due date'}
+        >
+          <CalendarClock size={11} />
+          {dueDateLabel}
+        </span>
+      )}
+
       {/* Priority dot */}
       <div
-        className={cn('mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full', PRIORITY_DOT[task.priority])}
+        className={cn('mt-2 h-1.5 w-1.5 flex-shrink-0 rounded-full', PRIORITY_DOT[task.priority])}
         title={task.priority}
       />
 

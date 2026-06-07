@@ -48,7 +48,7 @@ export function DashboardPanel({
   return (
     <div
       className={cn(
-        'flex h-full flex-col overflow-hidden rounded-[var(--radius-2xl)] border border-[var(--border-subtle)] bg-[var(--surface-card)] shadow-[var(--shadow-sm)]',
+        'flex flex-col overflow-hidden rounded-[var(--radius-panel)] border border-[var(--border-subtle)] bg-[var(--surface-card)] shadow-[var(--shadow-sm)]',
         className,
       )}
     >
@@ -72,12 +72,8 @@ export function DashboardPanel({
         </div>
       </div>
 
-      {/* PanelContainer */}
-      {!collapsed && (
-        <div className={cn('min-h-0 flex-1 overflow-y-auto', padded && 'p-[var(--panel-pad)]')}>
-          {children}
-        </div>
-      )}
+      {/* PanelContainer — sizes to content; the dashboard area scrolls as one. */}
+      {!collapsed && <div className={cn(padded && 'p-[var(--panel-pad)]')}>{children}</div>}
 
       {/* PanelFooter — summary + continuity link */}
       {!collapsed && footer && (

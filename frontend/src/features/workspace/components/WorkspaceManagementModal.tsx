@@ -60,7 +60,7 @@ export function WorkspaceManagementModal({ onClose }: WorkspaceManagementModalPr
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       <div className="absolute inset-0 bg-[var(--overlay)]" onClick={onClose} aria-hidden="true" />
 
-      <div className="relative z-10 flex max-h-[88vh] w-full max-w-3xl flex-col overflow-hidden rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-card)] shadow-[var(--shadow-lg)]">
+      <div className="relative z-10 flex max-h-[88vh] w-full max-w-3xl flex-col overflow-hidden rounded-[var(--radius-panel)] border border-[var(--border-subtle)] bg-[var(--surface-card)] shadow-[var(--shadow-lg)]">
         {/* Header */}
         <div className="flex flex-shrink-0 items-center justify-between border-b border-[var(--border-subtle)] px-8 py-6">
           <div>

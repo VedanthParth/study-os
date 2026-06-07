@@ -23,6 +23,9 @@
   --radius-2xl: 24px;
   --radius-full: 9999px;
 
+  /* Panel / card / modal corner — "well-crafted notebook", not soft SaaS. */
+  --radius-panel: 12px;
+
   /* ── Typography Scale ───────────────────────────────────────────────────── */
   --text-xs: 11px;
   --text-sm: 13px;

@@ -87,38 +87,30 @@ export function AnalyticsPanel() {
         <LoadingState label="Loading overview…" className="py-6" />
       ) : (
         <div className="flex flex-col">
-          {/* Stats: 2-row × 3-col grid */}
-          <div className="grid grid-cols-3 gap-4 p-[var(--panel-pad)]">
-            <StatCard
-              label="Tasks today"
-              value={String(overview.tasks_completed_today)}
-              dim={overview.tasks_completed_today === 0}
-            />
-            <StatCard
-              label="Tasks this week"
-              value={String(overview.tasks_completed_week)}
-              dim={overview.tasks_completed_week === 0}
-            />
-            <StatCard
-              label="Streak"
-              value={overview.streak_days === 0 ? '—' : `${overview.streak_days}d`}
-              dim={overview.streak_days === 0}
-            />
-            <StatCard
-              label="Study today"
-              value={formatStudyTime(overview.study_minutes_today)}
-              dim={overview.study_minutes_today === 0}
-            />
-            <StatCard
-              label="Study this week"
-              value={formatStudyTime(overview.study_minutes_week)}
-              dim={overview.study_minutes_week === 0}
-            />
-            <StatCard
-              label="Sessions"
-              value={String(overview.completed_sessions)}
-              dim={overview.completed_sessions === 0}
-            />
+          {/* Key insights — the three metrics that matter most, given weight. */}
+          <div className="p-[var(--panel-pad)]">
+            <div className="grid grid-cols-3 gap-3">
+              <StatCard
+                label="Tasks today"
+                value={String(overview.tasks_completed_today)}
+                dim={overview.tasks_completed_today === 0}
+              />
+              <StatCard
+                label="Streak"
+                value={overview.streak_days === 0 ? '—' : `${overview.streak_days}d`}
+                dim={overview.streak_days === 0}
+              />
+              <StatCard
+                label="Study today"
+                value={formatStudyTime(overview.study_minutes_today)}
+                dim={overview.study_minutes_today === 0}
+              />
+            </div>
+            {/* Supporting metrics — visually quieter */}
+            <p className="mt-3 text-[var(--text-meta)] text-[var(--text-tertiary)]">
+              This week · {overview.tasks_completed_week} tasks ·{' '}
+              {formatStudyTime(overview.study_minutes_week)} studied · {overview.completed_sessions} sessions
+            </p>
           </div>
 
           {/* Upcoming section */}

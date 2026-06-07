@@ -44,12 +44,12 @@ interface ColumnProps {
 function PanelColumn({ columnWidgets, visible, gap }: ColumnProps) {
   const active = columnWidgets.filter((k) => visible.includes(k))
   if (active.length === 0) return null
+  // Panels size to their content (no flex-1 fill) so the dashboard reads as one
+  // cohesive surface rather than widgets stretched into tall containers.
   return (
-    <div className="flex min-h-0 flex-col" style={{ gap }}>
+    <div className="flex flex-col" style={{ gap }}>
       {active.map((k) => (
-        <div key={k} className="min-h-0 flex-1">
-          {WIDGET_ELEMENTS[k]}
-        </div>
+        <div key={k}>{WIDGET_ELEMENTS[k]}</div>
       ))}
     </div>
   )
@@ -68,13 +68,13 @@ function renderLayout(layout: LayoutType, visible: WidgetKey[], gap: string) {
 
   const hasLeft  = leftActive.length > 0
   const hasRight = rightActive.length > 0
-  const colTemplate = hasLeft && hasRight ? '3fr 2fr' : '1fr'
+  // Importance weighting: the primary column (Tasks + Calendar) gets ~2/3 of the
+  // width, the supporting column (Study + Analytics) ~1/3. minmax(0,…) lets long
+  // content truncate instead of forcing the column wider.
+  const colTemplate = hasLeft && hasRight ? 'minmax(0, 2fr) minmax(0, 1fr)' : 'minmax(0, 1fr)'
 
   return (
-    <div
-      className="h-full"
-      style={{ display: 'grid', gridTemplateColumns: colTemplate, gap }}
-    >
+    <div style={{ display: 'grid', gridTemplateColumns: colTemplate, gap, alignItems: 'start' }}>
       {hasLeft && (
         <PanelColumn columnWidgets={leftActive} visible={visible} gap={gap} />
       )}
@@ -192,7 +192,7 @@ export function DashboardPage() {
           <LoadingState label="Loading workspace…" />
         </div>
       ) : (
-        <div className="flex-1 overflow-hidden" style={{ padding: densityDef.padding }}>
+        <div className="flex-1 overflow-y-auto" style={{ padding: densityDef.padding }}>
           {renderLayout(view.layout_type, view.visible_widgets, densityDef.gap)}
         </div>
       )}

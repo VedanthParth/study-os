@@ -63,7 +63,7 @@ export function TaskList({ tasks, onEdit, onStartStudy, onOpenEvent, linkedEvent
   }
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-1">
       {tasks.map((task) => (
         <div
           key={task.id}

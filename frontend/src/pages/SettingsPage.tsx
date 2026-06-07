@@ -33,7 +33,7 @@ export function SettingsPage() {
                     key={value}
                     onClick={() => setTheme(value)}
                     className={cn(
-                      'group relative flex flex-col gap-2 rounded-[var(--radius-2xl)] border p-5 text-left transition-colors',
+                      'group relative flex flex-col gap-2 rounded-[var(--radius-panel)] border p-5 text-left transition-colors',
                       selected
                         ? 'border-[var(--border-strong)] bg-[var(--surface-sunken)]'
                         : 'border-[var(--border-subtle)] hover:border-[var(--border-default)] hover:bg-[var(--surface-sunken)]',

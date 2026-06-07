@@ -137,7 +137,7 @@ export function CalendarEventModal({
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       <div className="absolute inset-0 bg-[var(--overlay)]" onClick={onClose} aria-hidden="true" />
 
-      <div className="relative z-10 w-full max-w-lg rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-card)] shadow-[var(--shadow-lg)]">
+      <div className="relative z-10 w-full max-w-lg rounded-[var(--radius-panel)] border border-[var(--border-subtle)] bg-[var(--surface-card)] shadow-[var(--shadow-lg)]">
         <div className="flex items-center justify-between border-b border-[var(--border-subtle)] px-7 py-5">
           <h2 className="text-2xl font-semibold tracking-tight text-[var(--text-primary)]">
             {isEdit ? 'Edit Event' : 'New Event'}

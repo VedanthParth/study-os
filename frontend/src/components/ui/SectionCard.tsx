@@ -12,7 +12,7 @@ export function SectionCard({ children, className, title }: SectionCardProps) {
   return (
     <section
       className={cn(
-        'rounded-[var(--radius-2xl)] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-[var(--panel-pad)] shadow-[var(--shadow-sm)]',
+        'rounded-[var(--radius-panel)] border border-[var(--border-subtle)] bg-[var(--surface-card)] p-[var(--panel-pad)] shadow-[var(--shadow-sm)]',
         className,
       )}
     >
