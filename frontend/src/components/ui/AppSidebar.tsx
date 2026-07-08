@@ -19,7 +19,7 @@ import { useUserStore } from '@/features/user/store'
 import { WorkspaceManagementModal } from '@/features/workspace/components/WorkspaceManagementModal'
 import { useWorkspaceStore } from '@/features/workspace/store'
 import { WORKSPACE_TYPE_LABELS } from '@/features/workspace/types'
-import { cn } from '@/lib/utils'
+import { cn } from '@/utils/cn'
 
 const NAV_ITEMS = [
   { label: 'Dashboard', icon: LayoutDashboard, to: ROUTES.HOME },

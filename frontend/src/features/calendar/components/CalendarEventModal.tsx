@@ -2,7 +2,7 @@ import { SquareArrowOutUpRight, X } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 
 import type { Task } from '@/features/tasks/types'
-import { cn } from '@/lib/utils'
+import { cn } from '@/utils/cn'
 
 import { useCalendarStore } from '../store'
 import type { CalendarEvent, CalendarEventType } from '../types'

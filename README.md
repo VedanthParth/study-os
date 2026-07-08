@@ -1,20 +1,26 @@
 # StudyOS
 
+## Configuration
+
+StudyOS is configured entirely through environment variables — the same codebase
+runs anywhere by changing configuration only. See
+[docs/configuration.md](docs/configuration.md) for the full reference. Copy
+`backend/.env.example` → `backend/.env` and `frontend/.env.example` →
+`frontend/.env` to customize; the defaults work out of the box for local dev.
+
 ## Frontend
 
-```
-bash
+```bash
 cd frontend
 npm install
 npm run dev
 ```
 
-Runs at http://localhost:5173
+Runs at http://localhost:5173 by default.
 
 ## Backend
 
-```
-bash
+```bash
 cd backend
 # Windows
 venv\Scripts\activate
@@ -24,7 +30,7 @@ source venv/bin/activate
 uvicorn app.main:app --reload
 ```
 
-Runs at http://localhost:8000  
+Runs at http://localhost:8000 by default (configurable via `HOST` / `PORT`).  
 API docs at http://localhost:8000/docs
 
 ## Project Structure

@@ -1,4 +1,4 @@
-import { ChevronRight, TrendingUp } from 'lucide-react'
+import { TrendingUp } from 'lucide-react'
 
 import { LoadingState } from '@/components/ui/LoadingState'
 import { ROUTES } from '@/constants'
@@ -6,12 +6,12 @@ import { useCalendarStore } from '@/features/calendar/store'
 import { DashboardPanel, PanelFooterLink, PanelFooterSummary } from '@/features/dashboard/components/DashboardPanel'
 import { useDashboardInteractions } from '@/features/dashboard/store/interactions'
 import { useTaskStore } from '@/features/tasks/store'
-import { cn } from '@/lib/utils'
 
 import { useAnalyticsStore } from '../store'
 import type { UpcomingItem } from '../types'
-import { formatShortDate, formatStudyTime } from '../types'
+import { formatStudyTime } from '../types'
 import { StatCard } from './StatCard'
+import { UpcomingItemsList } from './UpcomingItemsList'
 
 /**
  * Analytics panel for the dashboard — shows progress stats and upcoming items.
@@ -37,36 +37,6 @@ export function AnalyticsPanel() {
     const event = events.find((e) => e.id === item.id)
     if (event) return () => openEvent({ event })
     return null
-  }
-
-  function renderItem(item: UpcomingItem) {
-    const onClick = actionFor(item)
-    return (
-      <li key={item.id}>
-        <button
-          type="button"
-          onClick={onClick ?? undefined}
-          disabled={!onClick}
-          className={cn(
-            'group flex w-full items-center gap-2 rounded-[var(--radius-md)] px-3 py-2.5 text-left transition-colors',
-            onClick ? 'hover:bg-[var(--surface-sunken)]' : 'cursor-default',
-          )}
-        >
-          <span className="min-w-0 flex-1 truncate text-base text-[var(--text-secondary)]">
-            {item.title}
-          </span>
-          <span className="flex-shrink-0 text-[var(--text-meta)] text-[var(--text-tertiary)]">
-            {formatShortDate(item.date)}
-          </span>
-          {onClick && (
-            <ChevronRight
-              size={15}
-              className="flex-shrink-0 text-[var(--text-tertiary)] opacity-0 transition-opacity group-hover:opacity-100"
-            />
-          )}
-        </button>
-      </li>
-    )
   }
 
   return (
@@ -119,13 +89,13 @@ export function AnalyticsPanel() {
               {upcomingDeadlines.length > 0 && (
                 <div className="mb-3">
                   <p className="label-eyebrow mb-2 px-2">Deadlines</p>
-                  <ul className="flex flex-col gap-0.5">{upcomingDeadlines.map(renderItem)}</ul>
+                  <UpcomingItemsList items={upcomingDeadlines} actionFor={actionFor} showType={false} />
                 </div>
               )}
               {upcomingEvents.length > 0 && (
                 <div>
                   <p className="label-eyebrow mb-2 px-2">Events</p>
-                  <ul className="flex flex-col gap-0.5">{upcomingEvents.map(renderItem)}</ul>
+                  <UpcomingItemsList items={upcomingEvents} actionFor={actionFor} showType={false} />
                 </div>
               )}
             </div>

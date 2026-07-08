@@ -1,6 +1,6 @@
 import type { WidgetDensity } from '@/features/workspaceView/types'
 import { DENSITY_DEFINITIONS } from '@/features/workspaceView/types'
-import { cn } from '@/lib/utils'
+import { cn } from '@/utils/cn'
 
 const DENSITIES: WidgetDensity[] = ['compact', 'balanced', 'expanded']
 

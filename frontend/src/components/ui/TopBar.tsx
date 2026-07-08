@@ -1,5 +1,5 @@
 import { ThemeToggle } from '@/components/ui/ThemeToggle'
-import { cn } from '@/lib/utils'
+import { cn } from '@/utils/cn'
 
 interface TopBarProps {
   title: string

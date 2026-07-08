@@ -5,8 +5,8 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { RouterProvider } from 'react-router-dom'
 
+import { applyTheme, useSettingsStore } from '@/features/settings/store'
 import { router } from '@/routes'
-import { applyTheme, useSettingsStore } from '@/store/settingsStore'
 
 // Apply the persisted theme before the first paint to avoid a flash of the
 // wrong palette. The store reads the same localStorage value on init.

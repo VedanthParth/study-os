@@ -9,9 +9,14 @@ if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
 import app.models  # noqa: E402,F401 — must come after fileConfig; registers models with Base
+from app.core.config import settings  # noqa: E402
 from app.core.database import Base  # noqa: E402
 
 target_metadata = Base.metadata
+
+# Source the database URL from the central configuration rather than the static
+# value in alembic.ini, so migrations target whatever environment they run in.
+config.set_main_option("sqlalchemy.url", settings.DATABASE_URL)
 
 
 def run_migrations_offline() -> None:

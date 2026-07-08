@@ -1,7 +1,7 @@
 import { ChevronDown, Plus } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 
-import { cn } from '@/lib/utils'
+import { cn } from '@/utils/cn'
 
 import { useWorkspaceStore } from '../store'
 import { WORKSPACE_TYPE_LABELS } from '../types'

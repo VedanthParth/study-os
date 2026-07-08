@@ -1,6 +1,6 @@
 import type { WidgetKey } from '@/features/workspaceView/types'
 import { ALL_WIDGET_KEYS, WIDGET_REGISTRY } from '@/features/workspaceView/types'
-import { cn } from '@/lib/utils'
+import { cn } from '@/utils/cn'
 
 interface WidgetPickerProps {
   visibleWidgets: WidgetKey[]

@@ -1,7 +1,7 @@
 import { Moon, Sun } from 'lucide-react'
 
-import { cn } from '@/lib/utils'
-import { useSettingsStore } from '@/store/settingsStore'
+import { useSettingsStore } from '@/features/settings/store'
+import { cn } from '@/utils/cn'
 
 interface ThemeToggleProps {
   className?: string

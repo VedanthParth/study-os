@@ -3,9 +3,9 @@ import { Check, Moon, Sun } from 'lucide-react'
 import { PageContainer } from '@/components/ui/PageContainer'
 import { SectionCard } from '@/components/ui/SectionCard'
 import { TopBar } from '@/components/ui/TopBar'
-import { cn } from '@/lib/utils'
-import type { Theme } from '@/store/settingsStore'
-import { useSettingsStore } from '@/store/settingsStore'
+import type { Theme } from '@/features/settings/store'
+import { useSettingsStore } from '@/features/settings/store'
+import { cn } from '@/utils/cn'
 
 const THEME_OPTIONS: { value: Theme; label: string; description: string; icon: typeof Sun }[] = [
   { value: 'light', label: 'Paper & Ink', description: 'Warm ivory daylight — calm and readable.', icon: Sun },

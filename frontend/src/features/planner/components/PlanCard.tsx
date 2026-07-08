@@ -1,6 +1,6 @@
 import { ListChecks, Trash2 } from 'lucide-react'
 
-import { cn } from '@/lib/utils'
+import { cn } from '@/utils/cn'
 
 import type { StudyPlan } from '../types'
 

@@ -1,4 +1,4 @@
-import { cn } from '@/lib/utils'
+import { cn } from '@/utils/cn'
 
 import type { SessionBlock, TimerStatus } from '../types'
 import { BLOCK_TYPE_LABELS } from '../types'

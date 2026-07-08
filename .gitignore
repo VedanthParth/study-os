@@ -23,6 +23,9 @@ __pycache__/
 .env
 .env.*
 *.local
+# ...but keep the committed templates that document configuration.
+!.env.example
+!**/.env.example
 
 # ── AI Tooling ───────────────────────────────────────────────────────────────
 .claude/

@@ -1,13 +1,11 @@
 import { Calendar } from 'lucide-react'
-import { useRef, useState } from 'react'
 
 import { ROUTES } from '@/constants'
-import type { FCView } from '@/features/calendar/components/CalendarToolbar'
 import { CalendarToolbar } from '@/features/calendar/components/CalendarToolbar'
-import type { CalendarHandle } from '@/features/calendar/components/CalendarView'
 import { CalendarView } from '@/features/calendar/components/CalendarView'
+import { useCalendarController } from '@/features/calendar/hooks/useCalendarController'
 import { useCalendarStore } from '@/features/calendar/store'
-import { parseServerDate } from '@/features/calendar/types'
+import { parseServerDate, toDatetimeLocal } from '@/features/calendar/types'
 import { useWorkspaceStore } from '@/features/workspace/store'
 
 import { useDashboardInteractions } from '../store/interactions'
@@ -19,9 +17,8 @@ import { DashboardPanel, PanelFooterLink, PanelFooterSummary } from './Dashboard
  * the calendar store does the work, so no logic is duplicated.
  */
 export function CalendarPanel() {
-  const calendarRef = useRef<CalendarHandle>(null)
-  const [calendarTitle, setCalendarTitle] = useState('')
-  const [currentView, setCurrentView] = useState<FCView>('dayGridMonth')
+  const { calendarRef, title, view, prev, next, today, changeView, setTitle } =
+    useCalendarController('dayGridMonth')
 
   const activeWorkspace = useWorkspaceStore((s) => s.activeWorkspace)
   const events = useCalendarStore((s) => s.events)
@@ -32,14 +29,8 @@ export function CalendarPanel() {
   const todayKey = new Date().toDateString()
   const eventsToday = events.filter((e) => parseServerDate(e.start_time).toDateString() === todayKey).length
 
-  function handleViewChange(view: FCView) {
-    calendarRef.current?.changeView(view)
-    setCurrentView(view)
-  }
-
   function handleDateSelect(startStr: string, endStr: string) {
-    const toLocal = (s: string) => (s.length === 10 ? `${s}T09:00` : s.substring(0, 16))
-    openEvent({ event: null, defaultStart: toLocal(startStr), defaultEnd: toLocal(endStr) })
+    openEvent({ event: null, defaultStart: toDatetimeLocal(startStr), defaultEnd: toDatetimeLocal(endStr) })
   }
 
   return (
@@ -57,12 +48,12 @@ export function CalendarPanel() {
     >
       <div className="flex flex-col">
         <CalendarToolbar
-          title={calendarTitle}
-          currentView={currentView}
-          onPrev={() => calendarRef.current?.prev()}
-          onNext={() => calendarRef.current?.next()}
-          onToday={() => calendarRef.current?.today()}
-          onViewChange={handleViewChange}
+          title={title}
+          currentView={view}
+          onPrev={prev}
+          onNext={next}
+          onToday={today}
+          onViewChange={changeView}
           onAddEvent={() => openEvent({ event: null })}
         />
         <CalendarView
@@ -72,7 +63,7 @@ export function CalendarPanel() {
           className="[&_.fc-button]:hidden [&_.fc-toolbar]:hidden"
           onEventClick={(ev) => openEvent({ event: ev })}
           onDateSelect={handleDateSelect}
-          onDatesSet={setCalendarTitle}
+          onDatesSet={setTitle}
         />
       </div>
     </DashboardPanel>

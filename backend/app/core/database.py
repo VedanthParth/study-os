@@ -3,12 +3,17 @@ from pathlib import Path
 from sqlalchemy import create_engine
 from sqlalchemy.orm import DeclarativeBase, sessionmaker
 
-DB_DIR = Path(__file__).resolve().parents[2] / "database"
-DB_DIR.mkdir(exist_ok=True)
+from app.core.config import settings
 
-DATABASE_URL = f"sqlite:///{DB_DIR / 'studyos.db'}"
+# SQLite needs the parent directory to exist and a single-thread guard for
+# FastAPI's threadpool; other backends (e.g. PostgreSQL) need neither.
+connect_args: dict[str, object] = {}
+if settings.is_sqlite:
+    db_file = settings.DATABASE_URL.replace("sqlite:///", "", 1)
+    Path(db_file).parent.mkdir(parents=True, exist_ok=True)
+    connect_args["check_same_thread"] = False
 
-engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
+engine = create_engine(settings.DATABASE_URL, connect_args=connect_args)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 

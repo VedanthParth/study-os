@@ -62,3 +62,11 @@ export function parseServerDate(value: string): Date {
   const hasTimezone = /([zZ]|[+-]\d{2}:?\d{2})$/.test(value.trim())
   return new Date(hasTimezone ? value : `${value}Z`)
 }
+
+/**
+ * Normalise a FullCalendar select string to the `datetime-local` input format
+ * (YYYY-MM-DDTHH:MM). A date-only selection (length 10) defaults to 09:00.
+ */
+export function toDatetimeLocal(value: string): string {
+  return value.length === 10 ? `${value}T09:00` : value.substring(0, 16)
+}

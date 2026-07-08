@@ -9,7 +9,7 @@ import { SessionConfigModal } from '@/features/study/components/SessionConfigMod
 import { SessionControls } from '@/features/study/components/SessionControls'
 import { SessionProgress } from '@/features/study/components/SessionProgress'
 import { StudyTimer } from '@/features/study/components/StudyTimer'
-import { useStudyTimer } from '@/features/study/hooks/useStudyTimer'
+import { useStudySession } from '@/features/study/hooks/useStudySession'
 import { useStudyStore } from '@/features/study/store'
 import type { StudyMethod } from '@/features/study/types'
 import { METHOD_LABELS } from '@/features/study/types'
@@ -26,19 +26,13 @@ export function StudyPage() {
   const tasks = useTaskStore((s) => s.tasks)
   const fetchTasks = useTaskStore((s) => s.fetchTasks)
 
-  const activeSession = useStudyStore((s) => s.activeSession)
-  const timer = useStudyStore((s) => s.timer)
-  const pauseSession = useStudyStore((s) => s.pauseSession)
-  const resumeSession = useStudyStore((s) => s.resumeSession)
-  const stopSession = useStudyStore((s) => s.stopSession)
-  const advanceBlock = useStudyStore((s) => s.advanceBlock)
-  const dismissCompletion = useStudyStore((s) => s.dismissCompletion)
   const restoreSession = useStudyStore((s) => s.restoreSession)
 
-  const activeWorkspaceId = activeWorkspace?.id ?? null
+  // Shared session orchestration (tick + block advancement + derived state).
+  const { activeSession, timer, hasActiveSession, isCompleted, currentBlock, pause, resume, stop, dismissCompletion } =
+    useStudySession()
 
-  // Start the 1-second interval while timer is running
-  useStudyTimer()
+  const activeWorkspaceId = activeWorkspace?.id ?? null
 
   useEffect(() => {
     void fetchWorkspaces()
@@ -50,17 +44,6 @@ export function StudyPage() {
       void restoreSession()
     }
   }, [activeWorkspaceId, fetchTasks, restoreSession])
-
-  // Block advancement: when current block timer reaches 0
-  useEffect(() => {
-    if (timer.status !== 'running' || timer.secondsRemaining > 0 || !activeSession) return
-    const isLastBlock = timer.currentBlockIndex >= activeSession.blocks.length - 1
-    if (isLastBlock) {
-      void stopSession(true)
-    } else {
-      advanceBlock()
-    }
-  }, [timer.status, timer.secondsRemaining, timer.currentBlockIndex, activeSession, advanceBlock, stopSession])
 
   if (!activeWorkspaceId) {
     return (
@@ -77,11 +60,7 @@ export function StudyPage() {
     )
   }
 
-  const hasActiveSession = activeSession !== null && (timer.status === 'running' || timer.status === 'paused')
-  const isCompleted = timer.status === 'completed'
-  const currentBlock = hasActiveSession
-    ? activeSession.blocks[timer.currentBlockIndex]
-    : null
+  const linkedTask = activeSession?.task_id ? tasks.find((t) => t.id === activeSession.task_id) : undefined
 
   return (
     <>
@@ -103,7 +82,7 @@ export function StudyPage() {
               </p>
             </div>
             <div className="flex items-center gap-3">
-              <button onClick={() => { setShowConfig(true) }} className="btn-primary">
+              <button onClick={() => setShowConfig(true)} className="btn-primary">
                 Start New Session
               </button>
               <button onClick={dismissCompletion} className="btn-secondary">
@@ -114,17 +93,13 @@ export function StudyPage() {
         )}
 
         {/* ── Active session ── */}
-        {hasActiveSession && currentBlock && (
+        {activeSession && currentBlock && (
           <div className="flex flex-col items-center gap-6 py-10">
             {/* Session meta */}
             <div className="text-center">
               <p className="label-eyebrow">
                 {METHOD_LABELS[activeSession.method]}
-                {activeSession.task_id && tasks.find(t => t.id === activeSession.task_id) && (
-                  <span className="ml-2 normal-case">
-                    · {tasks.find(t => t.id === activeSession.task_id)?.title}
-                  </span>
-                )}
+                {linkedTask && <span className="ml-2 normal-case">· {linkedTask.title}</span>}
               </p>
             </div>
 
@@ -142,9 +117,9 @@ export function StudyPage() {
 
             <SessionControls
               status={timer.status}
-              onPause={() => void pauseSession()}
-              onResume={() => void resumeSession()}
-              onStop={() => void stopSession(false)}
+              onPause={pause}
+              onResume={resume}
+              onStop={() => stop(false)}
             />
           </div>
         )}

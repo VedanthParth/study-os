@@ -1,4 +1,4 @@
-import { cn } from '@/lib/utils'
+import { cn } from '@/utils/cn'
 
 import { useDashboardStore } from '../store'
 import type { DashboardLayout } from '../types'

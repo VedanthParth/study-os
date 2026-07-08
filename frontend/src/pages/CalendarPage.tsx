@@ -1,24 +1,23 @@
 import { Calendar } from 'lucide-react'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { EmptyState } from '@/components/ui/EmptyState'
 import { LoadingState } from '@/components/ui/LoadingState'
 import { PageContainer } from '@/components/ui/PageContainer'
 import { TopBar } from '@/components/ui/TopBar'
 import { CalendarEventModal } from '@/features/calendar/components/CalendarEventModal'
-import type { FCView } from '@/features/calendar/components/CalendarToolbar'
 import { CalendarToolbar } from '@/features/calendar/components/CalendarToolbar'
-import type { CalendarHandle } from '@/features/calendar/components/CalendarView'
 import { CalendarView } from '@/features/calendar/components/CalendarView'
+import { useCalendarController } from '@/features/calendar/hooks/useCalendarController'
 import { useCalendarStore } from '@/features/calendar/store'
 import type { CalendarEvent } from '@/features/calendar/types'
+import { toDatetimeLocal } from '@/features/calendar/types'
 import { useTaskStore } from '@/features/tasks/store'
 import { useWorkspaceStore } from '@/features/workspace/store'
 
 export function CalendarPage() {
-  const calendarRef = useRef<CalendarHandle>(null)
-  const [calendarTitle, setCalendarTitle] = useState('')
-  const [currentView, setCurrentView] = useState<FCView>('timeGridWeek')
+  const { calendarRef, title, view, prev, next, today, changeView, setTitle } =
+    useCalendarController('timeGridWeek')
   const [showModal, setShowModal] = useState(false)
   const [editingEvent, setEditingEvent] = useState<CalendarEvent | null>(null)
   const [newEventStart, setNewEventStart] = useState<string | null>(null)
@@ -50,15 +49,6 @@ export function CalendarPage() {
     }
   }, [activeWorkspaceId, fetchEvents, fetchTasks, clearEvents])
 
-  function handlePrev() { calendarRef.current?.prev() }
-  function handleNext() { calendarRef.current?.next() }
-  function handleToday() { calendarRef.current?.today() }
-
-  function handleViewChange(view: FCView) {
-    calendarRef.current?.changeView(view)
-    setCurrentView(view)
-  }
-
   function handleAddEvent() {
     setEditingEvent(null)
     setNewEventStart(null)
@@ -74,11 +64,8 @@ export function CalendarPage() {
   }
 
   function handleDateSelect(startStr: string, endStr: string) {
-    // Truncate to datetime-local format (YYYY-MM-DDTHH:MM)
-    const toLocal = (s: string) =>
-      s.length === 10 ? `${s}T09:00` : s.substring(0, 16)
-    setNewEventStart(toLocal(startStr))
-    setNewEventEnd(toLocal(endStr))
+    setNewEventStart(toDatetimeLocal(startStr))
+    setNewEventEnd(toDatetimeLocal(endStr))
     setEditingEvent(null)
     setShowModal(true)
   }
@@ -106,12 +93,12 @@ export function CalendarPage() {
         ) : (
           <>
             <CalendarToolbar
-              title={calendarTitle}
-              currentView={currentView}
-              onPrev={handlePrev}
-              onNext={handleNext}
-              onToday={handleToday}
-              onViewChange={handleViewChange}
+              title={title}
+              currentView={view}
+              onPrev={prev}
+              onNext={next}
+              onToday={today}
+              onViewChange={changeView}
               onAddEvent={handleAddEvent}
             />
             <CalendarView
@@ -119,7 +106,7 @@ export function CalendarPage() {
               events={events}
               onEventClick={handleEventClick}
               onDateSelect={handleDateSelect}
-              onDatesSet={setCalendarTitle}
+              onDatesSet={setTitle}
             />
           </>
         )}

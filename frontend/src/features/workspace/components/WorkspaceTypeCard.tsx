@@ -1,4 +1,4 @@
-import { cn } from '@/lib/utils'
+import { cn } from '@/utils/cn'
 
 import type { WorkspaceType } from '../types'
 import { WORKSPACE_TYPE_DESCRIPTIONS, WORKSPACE_TYPE_LABELS } from '../types'

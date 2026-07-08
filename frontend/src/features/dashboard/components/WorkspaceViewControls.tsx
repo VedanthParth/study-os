@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from 'react'
 
 import type { LayoutType, WidgetDensity, WidgetKey } from '@/features/workspaceView/types'
 import { LAYOUT_DEFINITIONS, WIDGET_REGISTRY } from '@/features/workspaceView/types'
-import { cn } from '@/lib/utils'
+import { cn } from '@/utils/cn'
 
 import { DensityPicker } from './DensityPicker'
 import { WidgetPicker } from './WidgetPicker'

@@ -2,7 +2,7 @@ import { Plus, Trash2, X } from 'lucide-react'
 import { useState } from 'react'
 
 import type { Task } from '@/features/tasks/types'
-import { cn } from '@/lib/utils'
+import { cn } from '@/utils/cn'
 
 import { useStudyStore } from '../store'
 import type { BlockType, SessionBlockConfig, StudyMethod } from '../types'

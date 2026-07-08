@@ -3,7 +3,7 @@ import type { ReactNode } from 'react'
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 
-import { cn } from '@/lib/utils'
+import { cn } from '@/utils/cn'
 
 /**
  * Reusable panel container for the dashboard.
